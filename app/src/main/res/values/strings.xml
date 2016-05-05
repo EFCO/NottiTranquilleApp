@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">Notti Tranquille</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in </string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is mandatory</string>
+    <string name="strsignup">Sign up</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="tvOrderby">Order by</string>
+    <string name="strAscending">Ascending</string>
+    <string name="strDescending">Descending</string>
+    <string name="errNotconnected">Connection Necessary</string>
+    <string name="errmsgNotConnected">To use this application, you must be connected to internet</string>
+    <string name="errbtTurnOn">Turn On</string>
+    <string name="strClose">Close</string>
+    <string name="strconnection_settings">Connection Settings</string>
+    <string name="title_activity_connection">Connection Settings</string>
+
+    <string name="strConnAddr">Insert Address</string>
+    <string name="straccept">Confirm</string>
+    <string name="strLoading">Loading data. Please wait…</string>
+
+    <string name="strNoSite">Insert the site</string>
+    <string name="strerrWrongMailOrPass">No Corresponding User Found. Check your mail and password and retry</string>
+    <string name="strerrVolleyConnection">Connection Error. Please Retry later. If the problem persist, contact tech support</string>
+
+    <string name="bSearch">Search</string>
+    <string name="bAdvSearch">Advanced Search</string>
+    <string name="bRandomSearch">Surprise Me!</string>
+    <string name="title_activity_search">Search</string>
+
+    <string name="strNation">Nation</string>
+    <string name="strCity">City</string>
+    <string name="strCheckIn">CheckIn</string>
+    <string name="strCheckOut">CheckOut</string>
+    <string name="strName">Name</string>
+    <string name="strPrice">Price</string>
+
+    <string name="strAny">Any</string>
+    <string name="strBelow100">Under 100€</string>
+    <string name="strBelow200">Under 200€</string>
+    <string name="strBelow500">Under 500€</string>
+    <string name="strOver500">No limit</string>
+    <string name="strerrWrongDate">You can\'t check out before checking in!</string>
+    <string name="title_activity_results">Results</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_advanced_search">Advanced Search</string>
+    <string name="strWiFi">WiFi</string>
+    <string name="strAirConditioner">Air Conditioner</string>
+    <string name="strStrongBox">StrongBox</string>
+    <string name="strBedandBreakfast"><![CDATA[Bed&Breakfast]]></string>
+    <string name="strHotel">Hotel</string>
+    <string name="strRural">Rural</string>
+    <string name="strRegister">Register</string>
+
+    <string name="strerrNoLocation">No Matching Location Found!</string>
+    <string name="strType">Type</string>
+
+</resources>
