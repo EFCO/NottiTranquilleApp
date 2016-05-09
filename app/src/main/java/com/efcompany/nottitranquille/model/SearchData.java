@@ -10,7 +10,7 @@ public class SearchData {
     private String city;
     private DateTime checkin;
     private DateTime checkout;
-    private int price;
+    private String pricerange;
 
     public String getNation() {
         return nation;
@@ -44,11 +44,7 @@ public class SearchData {
         this.checkout = checkout;
     }
 
-    public int getPrice() {
-        return price;
-    }
+    public String getPricerange() {return pricerange;}
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
+    public void setPricerange(String pricerange) {this.pricerange = pricerange;}
 }

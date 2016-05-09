@@ -12,9 +12,18 @@ public class AdvSearchData {
     private String city;
     private DateTime checkin;
     private DateTime checkout;
-    private int price;
-    private String locationType;
+    private String pricerange;
+    private String locationtype;
+    private int maxtenant;
     private List<String> commodities;
+
+    public int getMaxtenant() {
+        return maxtenant;
+    }
+
+    public void setMaxtenant(int maxtenant) {
+        this.maxtenant = maxtenant+1;
+    }
 
     public String getNation() {
         return nation;
@@ -48,22 +57,6 @@ public class AdvSearchData {
         this.checkout = checkout;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getLocationType() {
-        return locationType;
-    }
-
-    public void setLocationType(String locationType) {
-        this.locationType = locationType;
-    }
-
     public List<String> getCommodities() {
         return commodities;
     }
@@ -71,4 +64,12 @@ public class AdvSearchData {
     public void setCommodities(List<String> commodities) {
         this.commodities = commodities;
     }
+
+    public String getPricerange() {return pricerange;}
+
+    public void setPricerange(String pricerange) {this.pricerange = pricerange;}
+
+    public String getLocationtype() {return locationtype;}
+
+    public void setLocationtype(String locationtype) {this.locationtype = locationtype;}
 }

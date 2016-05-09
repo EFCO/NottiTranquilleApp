@@ -54,6 +54,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     DatePicker dpCheckOut;
     Spinner spPriceRange;
     Spinner spLocationType;
+    Spinner spMaxTenants;
     CheckBox cbWiFi;
     CheckBox cbAirConditioner;
     CheckBox cbStrongBox;
@@ -62,6 +63,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
 
     String[] priceRanges;
     String[] locationTypes;
+    String[] maxTenants;
 
     String nation;
     String city;
@@ -73,7 +75,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     private static final String TAG_CITY = "city";
     private static final String TAG_CHECKIN = "checkin";
     private static final String TAG_CHECKOUT = "checkout";
-    private static final String TAG_PRICERANGE = "price";
+    private static final String TAG_PRICERANGE = "pricerange";
     private static final String TAG_LOCATIONS = "locations";
 
     private String site;
@@ -96,48 +98,65 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         dpCheckOut = (DatePicker) findViewById(R.id.dpCheckOut);
         spPriceRange = (Spinner) findViewById(R.id.spPriceRange);
         spLocationType = (Spinner) findViewById(R.id.spLocationType);
+        spMaxTenants = (Spinner) findViewById(R.id.spMaxTenants);
         cbWiFi = (CheckBox) findViewById(R.id.cbWiFi);
         cbAirConditioner = (CheckBox) findViewById(R.id.cbAirConditioner);
         cbStrongBox = (CheckBox) findViewById(R.id.cbStrongBox);
         bSearch = (Button) findViewById(R.id.bSearch);
 
+        query = new AdvSearchData();
+
         priceRanges = new String[]{getString(R.string.strAny), getString(R.string.strBelow100), getString(R.string.strBelow200),
                 getString(R.string.strBelow500), getString(R.string.strOver500)};
         locationTypes = new String[] {getString(R.string.strAny),getString(R.string.strBedandBreakfast), getString(R.string.strHotel),
                 getString(R.string.strRural)};
+        maxTenants = new String[] {"1","2","3","4","5"};
 
         ArrayAdapter<String> padapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, priceRanges);
         ArrayAdapter<String> ladapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationTypes);
+        ArrayAdapter<String> tadapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, maxTenants);
 
         // Show a progress spinner, and perform the conection attempt.
         mProgressView = findViewById(R.id.searchProgress);
 
         // Getting result details from intent
         Intent i = getIntent();
-        if (!i.getStringExtra(TAG_NATION).isEmpty()){
-            etNation.setText(i.getStringExtra(TAG_NATION));
-        }
-        if (!i.getStringExtra(TAG_CITY).isEmpty()){
-            etCity.setText(i.getStringExtra(TAG_CITY));
-        }
+        if (i!=null) { //TODO Trovare modo differenziare arrivo da Main da arrivo da Search
+            //if (!i.getStringExtra(TAG_NATION).isEmpty()) {
+            if (i.getStringExtra(TAG_NATION)!=null) {
+                if (!i.getStringExtra(TAG_NATION).isEmpty()) {
+                    etNation.setText(i.getStringExtra(TAG_NATION));
+                }
+            }
+            if (i.getStringExtra(TAG_CITY)!=null) {
+                if (!i.getStringExtra(TAG_CITY).isEmpty()) {
+                    etCity.setText(i.getStringExtra(TAG_CITY));
+                }
+            }
 
-        if (!i.getStringExtra(TAG_CHECKIN).isEmpty()){
-            DateTime dtin =new DateTime(i.getStringExtra(TAG_CHECKIN));
-            dpCheckIn.updateDate(dtin.getYear(),dtin.getMonthOfYear(), dtin.getDayOfMonth());
-            //TODO Scoprire come settare il calendario. Probabilmente andrà ridotto di 1 il mese
+            if (i.getStringExtra(TAG_CHECKIN)!=null) {
+                if (!i.getStringExtra(TAG_CHECKIN).isEmpty()) {
+                    DateTime dtin = new DateTime(i.getStringExtra(TAG_CHECKIN));
+                    dpCheckIn.updateDate(dtin.getYear(), dtin.getMonthOfYear(), dtin.getDayOfMonth());
+                    //TODO Scoprire come settare il calendario. Probabilmente andrà ridotto di 1 il mese
+                }
+            }
+            if (i.getStringExtra(TAG_CHECKOUT)!=null) {
+                if (!i.getStringExtra(TAG_CHECKOUT).isEmpty()) {
+                    DateTime dtin = new DateTime(i.getStringExtra(TAG_CHECKOUT));
+                    dpCheckOut.updateDate(dtin.getYear(), dtin.getMonthOfYear(), dtin.getDayOfMonth());
+                    //TODO Scoprire come settare il calendario
+                }
+            }
+            //TODO Pricerange non più int
+            if (i.getIntExtra(TAG_PRICERANGE, 99) != 99) {
+                spPriceRange.setSelection(i.getIntExtra(TAG_PRICERANGE, 99));
+                //TODO Scoprire come settare lo spinner
+            }
         }
-        if (!i.getStringExtra(TAG_CHECKOUT).isEmpty()){
-            DateTime dtin =new DateTime(i.getStringExtra(TAG_CHECKOUT));
-            dpCheckOut.updateDate(dtin.getYear(),dtin.getMonthOfYear(), dtin.getDayOfMonth());
-            //TODO Scoprire come settare il calendario
-        }
-        if (i.getIntExtra(TAG_PRICERANGE,99)!=99){
-            spPriceRange.setSelection(i.getIntExtra(TAG_PRICERANGE,99));
-            //TODO Scoprire come settare lo spinner
-        }
-
 
         //Get the URL
         SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
@@ -158,10 +177,14 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         spLocationType.setAdapter(ladapter);
         spLocationType.setOnItemSelectedListener(this);
 
-        bAdvancedSearch.setOnClickListener(this);
+        spMaxTenants.setAdapter(tadapter);
+        spMaxTenants.setOnItemSelectedListener(this);
+
+        //bAdvancedSearch.setOnClickListener(this);
         bSearch.setOnClickListener(this);
     }
 
+    //TODO Non gli piacciono i metodi tradizionali. scoprire cosa vuole oggigiorno
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -185,26 +208,44 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     }
 
 
+    //TODO Trovare modo per usare elenco automatico
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId()==spPriceRange.getId()){
-            query.setPrice(position);
+            switch (position){
+                case 0:
+                    query.setPricerange("Fino+a+100+euro");
+                    break;
+                case 1:
+                    query.setPricerange("Fino+a+200+euro");
+                    break;
+                case 2:
+                    query.setPricerange("Fino+a+500+euro");
+                    break;
+                case 3:
+                    query.setPricerange("Nessun+limite");
+                    break;
+            }
+
         }
         else if (parent.getId()==spLocationType.getId()){
             switch (position){
                 case 0:
-                    query.setLocationType("Any");
+                    query.setLocationtype("Any");
                     break;
                 case 1:
-                    query.setLocationType("BedBreakfast");
+                    query.setLocationtype("BedBreakfast");
                     break;
                 case 2:
-                    query.setLocationType("Hotel");
+                    query.setLocationtype("Hotel");
                     break;
                 case 3:
-                    query.setLocationType("Rural");
+                    query.setLocationtype("Rural");
                     break;
             }
+        }
+        else if (parent.getId()==spMaxTenants.getId()){
+            query.setMaxtenant(position);
         }
     }
 
@@ -249,15 +290,16 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         query.setCheckin(new DateTime(dpCheckIn.getCalendarView().getDate()));
         query.setCheckout(new DateTime(dpCheckOut.getCalendarView().getDate()));
 
+        //TODO Trovare modo per usare elenco automatico
         List<String> commodities = new ArrayList<>();
         if (cbWiFi.isChecked()){
-            commodities.add("WiFi");
+            commodities.add("WiFi=on");
         }
         if (cbAirConditioner.isChecked()){
-            commodities.add("AirConditioner");
+            commodities.add("AirConditioner=on");
         }
         if (cbStrongBox.isChecked()){
-            commodities.add("StrongBox");
+            commodities.add("StrongBox=on");
         }
         query.setCommodities(commodities);
 

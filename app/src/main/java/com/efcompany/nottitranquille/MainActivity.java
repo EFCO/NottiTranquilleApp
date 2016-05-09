@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -103,10 +104,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    //TODO Non gli piacciono i metodi tradizionali. scoprire cosa vuole oggigiorno
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        Log.d("Options","Menu");
         return true;
     }
 

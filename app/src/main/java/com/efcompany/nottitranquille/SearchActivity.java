@@ -68,7 +68,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private static final String TAG_CITY = "city";
     private static final String TAG_CHECKIN = "checkin";
     private static final String TAG_CHECKOUT = "checkout";
-    private static final String TAG_PRICERANGE = "price";
+    private static final String TAG_PRICERANGE = "pricerange";
     private static final String TAG_LOCATIONS = "locations";
 
     private String site;
@@ -93,6 +93,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         spPriceRange = (Spinner) findViewById(R.id.spPriceRange);
         bAdvancedSearch = (Button) findViewById(R.id.bAdvSearch);
         bSearch = (Button) findViewById(R.id.bSearch);
+
+        query = new SearchData();
 
         priceRanges = new String[]{getString(R.string.strAny), getString(R.string.strBelow100), getString(R.string.strBelow200),
                 getString(R.string.strBelow500), getString(R.string.strOver500)};
@@ -122,6 +124,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         bSearch.setOnClickListener(this);
     }
 
+    //TODO Non gli piacciono i metodi tradizionali. scoprire cosa vuole oggigiorno
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -147,7 +150,20 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        price=position;
+        switch (position){
+            case 0:
+                query.setPricerange("Fino+a+100+euro");
+                break;
+            case 1:
+                query.setPricerange("Fino+a+200+euro");
+                break;
+            case 2:
+                query.setPricerange("Fino+a+500+euro");
+                break;
+            case 3:
+                query.setPricerange("Nessun+limite");
+                break;
+        }
 //        switch (position){
 //            case 0:
 //                price
@@ -207,7 +223,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 focusView = etNation;
                 cancel = true;
             }
-            if (!TextUtils.isEmpty(city)) {
+            if (TextUtils.isEmpty(city)) {
                 etCity.setError(getString(R.string.error_field_required));
                 focusView = etCity;
                 cancel = true;
@@ -236,12 +252,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
             }
             else{
+                //Log.d("Date",new DateTime(dpCheckIn.getCalendarView().getDate()).toString() );
                 //Gather the data for the query
                 query.setNation(nation);
                 query.setCity(city);
                 query.setCheckin(new DateTime(dpCheckIn.getCalendarView().getDate()));
                 query.setCheckout(new DateTime(dpCheckOut.getCalendarView().getDate()));
-                query.setPrice(price);
                 //TODO Connect
                 JsonObjectRequest jsonObjReq = null;
                 try {
