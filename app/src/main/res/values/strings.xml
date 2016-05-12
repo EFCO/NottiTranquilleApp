@@ -64,5 +64,8 @@
 
     <string name="strerrNoLocation">No Matching Location Found!</string>
     <string name="strType">Type</string>
+    <string name="strUsername">Username</string>
+    <string name="strAddress">Address</string>
+    <string name="strDateofbirth">Date of Birth</string>
 
 </resources>

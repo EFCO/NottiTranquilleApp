@@ -29,6 +29,34 @@
             android:inputType="textPassword"
             android:maxLines="1" android:singleLine="true" />
 
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etUsername"
+            android:hint="@string/strUsername"
+            android:maxLines="1" android:singleLine="true"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etName"
+            android:hint="@string/strName"
+            android:maxLines="1" android:singleLine="true"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etAddress"
+            android:hint="@string/strAddress"
+            android:maxLines="1" android:singleLine="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etDateofbirth"
+            android:hint="@string/strDateofbirth"
+            android:maxLines="1" android:singleLine="true"/>
+
         <Button android:id="@+id/email_registration_button" style="?android:textAppearanceSmall"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_marginTop="16dp" android:text="@string/strRegister"

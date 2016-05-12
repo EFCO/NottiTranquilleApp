@@ -17,6 +17,8 @@ public class AdvSearchData {
     private int maxtenant;
     private List<String> commodities;
 
+    private String search = "advsearch";
+
     public int getMaxtenant() {
         return maxtenant;
     }

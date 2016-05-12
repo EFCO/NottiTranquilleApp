@@ -38,6 +38,10 @@ public class RegistrationActivity extends Activity {
     // UI references.
     EditText mEmailView;
     EditText mPasswordView;
+    EditText mUsernameView;
+    EditText mNameView;
+    EditText mAddressView;
+    EditText mDateofbirthView;
     View mProgressView;
     View mEmailRegistrationFormView;
     Button mEmailRegisterButton;
@@ -63,11 +67,17 @@ public class RegistrationActivity extends Activity {
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
         }
-        site += "/registration.php";
+        site += "/api/access.jsp";
+       // site += "/registration.php";
+        //localhost:8080/api/access.jsp
 
 
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
+        mUsernameView = (EditText) findViewById(R.id.etUsername);
+        mNameView = (EditText) findViewById(R.id.etName);
+        mAddressView = (EditText) findViewById(R.id.etAddress);
+        mDateofbirthView = (EditText) findViewById(R.id.etDateofbirth);
         mProgressView = findViewById(R.id.registration_progress);
         mEmailRegistrationFormView = findViewById(R.id.email_login_form);
         mEmailRegisterButton = (Button) findViewById(R.id.email_sign_in_button);
@@ -88,6 +98,10 @@ public class RegistrationActivity extends Activity {
         // Store values at the time of the login attempt.
         email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String username = mUsernameView.getText().toString();
+        String name = mNameView.getText().toString();
+        String address = mAddressView.getText().toString();
+        String dateofbirth = mDateofbirthView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -112,6 +126,30 @@ public class RegistrationActivity extends Activity {
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
+            cancel = true;
+        }
+        // Check for a valid Username.
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
+            cancel = true;
+        }
+        // Check for a valid Name.
+        if (TextUtils.isEmpty(name)) {
+            mNameView.setError(getString(R.string.error_field_required));
+            focusView = mNameView;
+            cancel = true;
+        }
+        // Check for a valid Address.
+        if (TextUtils.isEmpty(address)) {
+            mAddressView.setError(getString(R.string.error_field_required));
+            focusView = mAddressView;
+            cancel = true;
+        }
+        // Check for a valid Date of Birth.
+        if (TextUtils.isEmpty(dateofbirth)) {
+            mDateofbirthView.setError(getString(R.string.error_field_required));
+            focusView = mDateofbirthView;
             cancel = true;
         }
 
@@ -149,6 +187,13 @@ public class RegistrationActivity extends Activity {
             Map<String, String> fields = new HashMap<String, String>();
             fields.put("mail", email);
             fields.put("password", codedPassword);
+            fields.put("username", username);
+            fields.put("name", name);
+            fields.put("address", address);
+            fields.put("dateofbirth", dateofbirth);
+            fields.put("registrer", "registrer");
+            //fields.put("api", "true");
+
 
 
 
@@ -160,7 +205,7 @@ public class RegistrationActivity extends Activity {
                 public void onResponse(JSONObject response) {
                     try {
                         VolleyLog.v("Response:%n %s", response.toString(4));
-                        if (response.getString("success").equals("1")) {
+                        if (response.getString("code").equals("1")) {
                             if (getParent() == null) {
                                 setResult(Activity.RESULT_OK);
                             } else {
@@ -168,7 +213,8 @@ public class RegistrationActivity extends Activity {
                             }
                             finish();
                         } else{
-                            mPasswordView.setError(getString(R.string.strerrWrongMailOrPass));
+                           // mPasswordView.setError(getString(R.string.strerrWrongMailOrPass));
+                            mPasswordView.setError(response.getString("message"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

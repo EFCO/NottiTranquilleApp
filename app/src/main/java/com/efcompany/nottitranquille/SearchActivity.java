@@ -63,7 +63,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     int price;
 
     // JSON Node names
-    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_SUCCESS = "code";
+    private static final String TAG_MESSAGE = "message";
     private static final String TAG_NATION = "nation";
     private static final String TAG_CITY = "city";
     private static final String TAG_CHECKIN = "checkin";
@@ -113,7 +114,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
         }
-        site += "/search.php";
+        //site += "/search.php";
+        site += "/api/search.jsp";
 
         gson = new Gson();
 

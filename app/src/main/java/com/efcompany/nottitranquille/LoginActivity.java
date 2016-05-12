@@ -66,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
         }
-        site += "/login.php";
+        //site += "/login.php";
+        site += "/api/access.jsp";
 
 
         mEmailView = (EditText) findViewById(R.id.email);
@@ -114,11 +115,13 @@ public class LoginActivity extends AppCompatActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
+       }
+        //TODO Da rimettere per permettere connessione sia con mail che con username
+// else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -152,8 +155,12 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             Map<String, String> fields = new HashMap<String, String>();
-                    fields.put("mail", email);
+                 //TODO Da rimettere per permettere connessione sia con mail che con username
+                    //fields.put("mail", email);
+                    fields.put("username", email);
                     fields.put("password", codedPassword);
+                    fields.put("login", "login");
+                    //fields.put("api", "true");
 
 
 
@@ -165,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                         try {
                             VolleyLog.v("Response:%n %s", response.toString(4));
-                            if (response.getString("success").equals("1")) {
+                            if (response.getString("code").equals("1")) {
                                 if (getParent() == null) {
                                     setResult(Activity.RESULT_OK);
                                 } else {
@@ -173,7 +180,8 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                                 finish();
                             } else{
-                                mPasswordView.setError(getString(R.string.strerrWrongMailOrPass));
+                                //mPasswordView.setError(getString(R.string.strerrWrongMailOrPass));
+                                mPasswordView.setError(response.getString("message"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

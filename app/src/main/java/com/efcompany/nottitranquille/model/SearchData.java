@@ -12,6 +12,8 @@ public class SearchData {
     private DateTime checkout;
     private String pricerange;
 
+    private String search = "search";
+
     public String getNation() {
         return nation;
     }

@@ -70,7 +70,8 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     int price;
 
     // JSON Node names
-    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_SUCCESS = "code";
+    private static final String TAG_MESSAGE = "message";
     private static final String TAG_NATION = "nation";
     private static final String TAG_CITY = "city";
     private static final String TAG_CHECKIN = "checkin";
@@ -166,7 +167,8 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
         }
-        site += "/Advsearch.php";
+        //site += "/Advsearch.php";
+        site += "/api/search.jsp";
 
         gson = new Gson();
 

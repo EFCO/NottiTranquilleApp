@@ -18,6 +18,10 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+//    #per i setting (ovvero commodities e locationtypes)
+//    link: localhost:8080/api/getSetting.jsp
+//    parametri: setting=commodities o setting=locationtypes
+
     static final int LOG_IN = 1;
     static final int CONNECT = 2;
     static final int REGISTRATION = 3;
