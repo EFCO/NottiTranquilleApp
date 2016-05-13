@@ -53,8 +53,8 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
         SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         if (!etconnAddr.getText().toString().equals("")){
-            editor.putString("connectto","http://" +  etconnAddr.getText().toString() + "/nottitranquille");
-            editor.commit();
+            editor.putString("connectto","http://" +  etconnAddr.getText().toString());
+            editor.apply();
             finish();
         }
         //If the user pressed the "Confirm" button without writing anything

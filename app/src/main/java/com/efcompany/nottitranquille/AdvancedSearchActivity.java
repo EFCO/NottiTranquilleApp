@@ -280,8 +280,8 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             query.setCity(city);
         }
         //TODO Scoprire come NON Impostare il calendario
-        query.setCheckin(new DateTime(dpCheckIn.getCalendarView().getDate()));
-        query.setCheckout(new DateTime(dpCheckOut.getCalendarView().getDate()));
+        query.setCheckin(checkin);
+        query.setCheckout(checkout);
 
         //TODO Trovare modo per usare elenco automatico
         List<String> commodities = new ArrayList<>();

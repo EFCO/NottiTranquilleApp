@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.efcompany.nottitranquille.extratools.AppController;
 import com.efcompany.nottitranquille.extratools.GenericRequest;
 import com.efcompany.nottitranquille.model.Location;
@@ -43,8 +44,10 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -245,64 +248,58 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             //TODO Controllo DatePicker (Potrebbe servire dialog)
             else if (checkout.isBefore(checkin)) {
                 showProgress(false);
-                Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
+                Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG).show();
             }
             else{
                 //Log.d("Date",new DateTime(dpCheckIn.getCalendarView().getDate()).toString() );
                 //Gather the data for the query
                 query.setNation(nation);
                 query.setCity(city);
-                query.setCheckin(new DateTime(dpCheckIn.getCalendarView().getDate()));
-                query.setCheckout(new DateTime(dpCheckOut.getCalendarView().getDate()));
+                query.setCheckin(checkin.toString("dd-MM-yyyy"));
+                query.setCheckout(checkout.toString("dd-MM-yyyy"));
                 //TODO Connect
-                JsonObjectRequest jsonObjReq = null;
-                try {
-                    jsonObjReq = new JsonObjectRequest(Request.Method.POST, site,
-                            new JSONObject(gson.toJson(query)) , new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d("Parser", response.toString());
-
-                            try {
-                                VolleyLog.v("Response:%n %s", response.toString(4));
-                                if (response.getString(TAG_SUCCESS).equals("1")) {
-                                    // Locations found
-                                    // Getting Array of Locations
-                                    locsjson = response.getJSONArray(TAG_LOCATIONS);
-
-//                                    // Looping through All Locations
-//                                    for (int i = 0; i < locsjson.length(); i++) {
-//                                        locations.add(gson.fromJson(locsjson.getJSONObject(i).toString(), Location.class));
-//                                    }
-                                    showProgress(false);
-                                    Intent in =new Intent(SearchActivity.this, ResultsActivity.class);
-                                    in.putExtra("json", locsjson.toString());
-                                    in.putExtra("query", query.toString());
-                                    startActivity(in);
-
-
-                                } else{
-                                    Toast.makeText(SearchActivity.this, R.string.strerrNoLocation, Toast.LENGTH_LONG).show();
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                StringRequest postRequest = new StringRequest(Request.Method.POST, site,
+                        new Response.Listener<String>()
+                        {
+                            @Override
+                            public void onResponse(String response) {
+                                // response
+                                Log.d("Response", response);
                             }
-
+                        },
+                        new Response.ErrorListener()
+                        {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // error
+                                Log.d("Error.Response", error.getMessage());
+                            }
                         }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            VolleyLog.d("Parser", "Error: " + error.getMessage());
+                ) {
+                    @Override
+                    protected Map<String, String> getParams()
+                    {
+                        Map<String, String>  params = new HashMap<String, String>();
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(gson.toJson(query));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                // Adding request to request queue
-                AppController.getInstance().addToRequestQueue(jsonObjReq);
+                        Iterator<String> iter = jsonObject.keys();
+                        HashMap<String, String> hash = new HashMap<>();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            try {
+                                params.put(key, jsonObject.getString(key));
+                            } catch (JSONException e) {
+                                // Something went wrong!
+                            }
+                        }
+                        return params;
+                    }
+                };
+                AppController.getInstance().addToRequestQueue(postRequest);
             }
         }
         if (v.getId()==bAdvancedSearch.getId()){
@@ -310,7 +307,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             Intent in = new Intent(SearchActivity.this, AdvancedSearchActivity.class);
             // Sending info to next activity
             in.putExtra(TAG_NATION, etNation.getText().toString());
-            in.putExtra(TAG_CITY, etNation.getText().toString());
+            in.putExtra(TAG_CITY, etCity.getText().toString());
             in.putExtra(TAG_CHECKIN, dpCheckIn.getCalendarView().getDate());
             in.putExtra(TAG_CHECKOUT, dpCheckOut.getCalendarView().getDate());
             in.putExtra(TAG_PRICERANGE, price);

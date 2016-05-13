@@ -36,7 +36,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/etCity"
                 android:hint="@string/strCity"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -49,14 +50,18 @@
                 android:layout_height="205dp"
                 android:id="@+id/dpCheckIn"
                 android:hint="@string/strCheckIn"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"/>
 
             <DatePicker
                 android:layout_width="wrap_content"
                 android:layout_height="203dp"
                 android:id="@+id/dpCheckOut"
                 android:hint="@string/strCheckOut"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"/>
         </LinearLayout>
 
         <Spinner

@@ -8,8 +8,8 @@ import org.joda.time.DateTime;
 public class SearchData {
     private String nation;
     private String city;
-    private DateTime checkin;
-    private DateTime checkout;
+    private String checkin;
+    private String checkout;
     private String pricerange;
 
     private String search = "search";
@@ -30,19 +30,19 @@ public class SearchData {
         this.city = city;
     }
 
-    public DateTime getCheckin() {
+    public String getCheckin() {
         return checkin;
     }
 
-    public void setCheckin(DateTime checkin) {
+    public void setCheckin(String checkin) {
         this.checkin = checkin;
     }
 
-    public DateTime getCheckout() {
+    public String getCheckout() {
         return checkout;
     }
 
-    public void setCheckout(DateTime checkout) {
+    public void setCheckout(String checkout) {
         this.checkout = checkout;
     }
 
