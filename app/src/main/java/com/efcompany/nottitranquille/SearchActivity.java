@@ -233,7 +233,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             }
 
 
-
+            DateTime checkin = new DateTime(dpCheckIn.getCalendarView().getDate());
+            DateTime checkout = new DateTime(dpCheckOut.getCalendarView().getDate());
             if (cancel) {
                 // There was an error; don't attempt login and focus the first
                 // form field with an error.
@@ -242,15 +243,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 focusView.requestFocus();
             }
             //TODO Controllo DatePicker (Potrebbe servire dialog)
-            else if (dpCheckIn.getYear()>dpCheckOut.getYear()) {
-                showProgress(false);
-                Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
-            }
-            else if (dpCheckIn.getYear()==dpCheckOut.getYear() && dpCheckIn.getMonth()>dpCheckOut.getMonth()) {
-                showProgress(false);
-                Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
-            }
-            else if (dpCheckIn.getMonth()>dpCheckOut.getMonth() && dpCheckIn.getDayOfMonth()>dpCheckOut.getMonth()) {
+            else if (checkout.isBefore(checkin)) {
                 showProgress(false);
                 Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
             }

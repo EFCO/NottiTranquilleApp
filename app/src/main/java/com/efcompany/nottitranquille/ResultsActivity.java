@@ -25,6 +25,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -94,7 +95,7 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
         }
-        site += "/results.php";
+        site += "/api/search.jsp";
 
         ArrayAdapter<String> wadapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, orderWhat);
@@ -112,32 +113,33 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
         //TODO: Riempire locationsList da Intent
         String locjson = i.getStringExtra("json");
 
-        JSONObject json = new JSONObject();
+        JSONArray json = null;
         try {
-            json = new JSONObject(locjson);
+            json = new JSONArray(locjson);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        for (int j = 0; j < json.length();j++) {
-            Iterator<String> iter = null;
+        assert json != null;
+        for (int j = 0; j < json.length(); j++) {
+            JSONObject result = null;
             try {
-                //TODO: da completare
-                iter = json.getJSONObject("Stringadainserire").keys();
+                result = json.getJSONObject(j);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            assert result != null;
+            Iterator<String> iter = result.keys();
+            HashMap<String, String> hash = new HashMap<>();
             while (iter.hasNext()) {
                 String key = iter.next();
-                HashMap<String, String> hash = new HashMap<>();
                 try {
-                    hash.put(key, json.getString(key));
+                    hash.put(key, result.getString(key));
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    // Something went wrong!
                 }
-                locationsList.add(hash);
             }
+            locationsList.add(hash);
         }
         //Updating parsed JSON data into ListView
         ListAdapter adapter = new SimpleAdapter(

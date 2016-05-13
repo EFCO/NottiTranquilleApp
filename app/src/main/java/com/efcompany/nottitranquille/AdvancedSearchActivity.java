@@ -141,15 +141,13 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             if (i.getStringExtra(TAG_CHECKIN)!=null) {
                 if (!i.getStringExtra(TAG_CHECKIN).isEmpty()) {
                     DateTime dtin = new DateTime(i.getStringExtra(TAG_CHECKIN));
-                    dpCheckIn.updateDate(dtin.getYear(), dtin.getMonthOfYear()-1, dtin.getDayOfMonth());
-                    //TODO Scoprire come settare il calendario. Probabilmente andrà ridotto di 1 il mese
+                    dpCheckIn.updateDate(dtin.getYear(), dtin.getMonthOfYear() - 1, dtin.getDayOfMonth());
                 }
             }
             if (i.getStringExtra(TAG_CHECKOUT)!=null) {
                 if (!i.getStringExtra(TAG_CHECKOUT).isEmpty()) {
                     DateTime dtin = new DateTime(i.getStringExtra(TAG_CHECKOUT));
-                    dpCheckOut.updateDate(dtin.getYear(), dtin.getMonthOfYear(), dtin.getDayOfMonth());
-                    //TODO Scoprire come settare il calendario
+                    dpCheckOut.updateDate(dtin.getYear(), dtin.getMonthOfYear() - 1, dtin.getDayOfMonth());
                 }
             }
             //TODO Pricerange non più int
@@ -186,7 +184,6 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         bSearch.setOnClickListener(this);
     }
 
-    //TODO Non gli piacciono i metodi tradizionali. scoprire cosa vuole oggigiorno
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -261,15 +258,9 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         showProgress(true);
         //TODO Controllo DatePicker (Potrebbe servire dialog)
-        if (dpCheckIn.getYear()>dpCheckOut.getYear()) {
-            showProgress(false);
-            Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
-        }
-        if (dpCheckIn.getYear()==dpCheckOut.getYear() && dpCheckIn.getMonth()>dpCheckOut.getMonth()) {
-            showProgress(false);
-            Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
-        }
-        if (dpCheckIn.getMonth()>dpCheckOut.getMonth() && dpCheckIn.getDayOfMonth()>dpCheckOut.getMonth()) {
+        DateTime checkin = new DateTime(dpCheckIn.getCalendarView().getDate());
+        DateTime checkout = new DateTime(dpCheckOut.getCalendarView().getDate());
+        if (checkout.isBefore(checkin)) {
             showProgress(false);
             Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
         }
