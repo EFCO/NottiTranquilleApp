@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ConnectivityManager conmng;
     NetworkInfo activeNetwork;
 
+    private static final String TAG_SOURCE = "source";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == bAdvSearch.getId()){
 
             Intent intent = new Intent(this, AdvancedSearchActivity.class);
+            intent.putExtra(TAG_SOURCE,0);
             startActivity(intent);
         }
         if (v.getId() == bRandomSearch.getId()){

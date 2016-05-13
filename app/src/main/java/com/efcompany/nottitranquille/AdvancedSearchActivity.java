@@ -77,7 +77,8 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     private static final String TAG_CHECKIN = "checkin";
     private static final String TAG_CHECKOUT = "checkout";
     private static final String TAG_PRICERANGE = "pricerange";
-    private static final String TAG_LOCATIONS = "locations";
+    private static final String TAG_LOCATIONS = "results";
+    private static final String TAG_SOURCE = "source";
 
     private String site;
     AdvSearchData query;
@@ -125,8 +126,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
 
         // Getting result details from intent
         Intent i = getIntent();
-        if (i!=null) { //TODO Trovare modo differenziare arrivo da Main da arrivo da Search
-            //if (!i.getStringExtra(TAG_NATION).isEmpty()) {
+        if (i.getIntExtra(TAG_SOURCE, 0)==1) {
             if (i.getStringExtra(TAG_NATION)!=null) {
                 if (!i.getStringExtra(TAG_NATION).isEmpty()) {
                     etNation.setText(i.getStringExtra(TAG_NATION));
@@ -141,7 +141,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             if (i.getStringExtra(TAG_CHECKIN)!=null) {
                 if (!i.getStringExtra(TAG_CHECKIN).isEmpty()) {
                     DateTime dtin = new DateTime(i.getStringExtra(TAG_CHECKIN));
-                    dpCheckIn.updateDate(dtin.getYear(), dtin.getMonthOfYear(), dtin.getDayOfMonth());
+                    dpCheckIn.updateDate(dtin.getYear(), dtin.getMonthOfYear()-1, dtin.getDayOfMonth());
                     //TODO Scoprire come settare il calendario. Probabilmente andrà ridotto di 1 il mese
                 }
             }

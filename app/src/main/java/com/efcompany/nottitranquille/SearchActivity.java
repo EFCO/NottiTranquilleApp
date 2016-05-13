@@ -70,7 +70,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private static final String TAG_CHECKIN = "checkin";
     private static final String TAG_CHECKOUT = "checkout";
     private static final String TAG_PRICERANGE = "pricerange";
-    private static final String TAG_LOCATIONS = "locations";
+    private static final String TAG_LOCATIONS = "results";
+    private static final String TAG_SOURCE = "source";
 
     private String site;
     SearchData query;
@@ -320,6 +321,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             in.putExtra(TAG_CHECKIN, dpCheckIn.getCalendarView().getDate());
             in.putExtra(TAG_CHECKOUT, dpCheckOut.getCalendarView().getDate());
             in.putExtra(TAG_PRICERANGE, price);
+            in.putExtra(TAG_SOURCE,1);
             // starting new activity
             startActivity(in);
         }
