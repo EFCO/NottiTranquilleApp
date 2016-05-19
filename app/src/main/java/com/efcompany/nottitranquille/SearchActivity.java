@@ -276,7 +276,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                                         showProgress(false);
                                         Intent in = new Intent(SearchActivity.this, ResultsActivity.class);
                                         in.putExtra("json", locsjson.toString());
-                                        in.putExtra("query", query.toString());
+                                        in.putExtra("query", getString(R.string.strResultsQuery) + query.toString());
                                         startActivity(in);
 
 

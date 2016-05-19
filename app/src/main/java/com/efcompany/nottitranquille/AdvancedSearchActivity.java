@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.efcompany.nottitranquille.ConnectionActivity;
 import com.efcompany.nottitranquille.R;
 import com.efcompany.nottitranquille.ResultsActivity;
@@ -44,7 +45,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class AdvancedSearchActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -262,7 +266,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         DateTime checkout = new DateTime(dpCheckOut.getCalendarView().getDate());
         if (checkout.isBefore(checkin)) {
             showProgress(false);
-            Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG);
+            Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG).show();
         }
 
         nation = etNation.getText().toString();
@@ -280,8 +284,8 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             query.setCity(city);
         }
         //TODO Scoprire come NON Impostare il calendario
-        query.setCheckin(checkin);
-        query.setCheckout(checkout);
+        query.setCheckin(checkin.toString("dd-MM-yyyy"));
+        query.setCheckout(checkout.toString("dd-MM-yyyy"));
 
         //TODO Trovare modo per usare elenco automatico
         List<String> commodities = new ArrayList<>();
@@ -297,45 +301,72 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         query.setCommodities(commodities);
 
         //TODO Connect
-        JsonObjectRequest jsonObjReq = null;
-        try {
-            jsonObjReq = new JsonObjectRequest(Request.Method.POST, site, new JSONObject(gson.toJson(query)), new Response.Listener<JSONObject>() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, site,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("Parser", response);
+                        try {
+                            JSONObject json_response = new JSONObject(response);
+                            if (json_response.getString(TAG_SUCCESS).equals("1")) {
+                                // Locations found
+                                // Getting Array of Locations
+                                locsjson = json_response.getJSONArray(TAG_LOCATIONS);
 
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.d("Parser", response.toString());
+//                                    // Looping through All Locations
+//                                    for (int i = 0; i < locsjson.length(); i++) {
+//                                        locations.add(gson.fromJson(locsjson.getJSONObject(i).toString(), Location.class));
+//                                    }
+                                showProgress(false);
+                                Intent in = new Intent(AdvancedSearchActivity.this, ResultsActivity.class);
+                                in.putExtra("json", locsjson.toString());
+                                in.putExtra("query",getString(R.string.strResultsQuery) +  query.toString());
+                                startActivity(in);
 
 
-                    try {
-                        if (response.getString(TAG_SUCCESS).equals("1")){
-                            // Locations found
-                            // Getting Array of Locations
-                            locsjson = response.getJSONArray(TAG_LOCATIONS);
-                            showProgress(false);
-                            Intent in =new Intent(AdvancedSearchActivity.this, ResultsActivity.class);
-                            in.putExtra("json", response.toString());
-                            in.putExtra("query", query.toString());
-                            startActivity(in);
-                        } else{
-                            Toast.makeText(AdvancedSearchActivity.this, R.string.strerrNoLocation, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(AdvancedSearchActivity.this, R.string.strerrNoLocation, Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
                     }
-
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Parser", error.getMessage());
+                    }
                 }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d("Parser", "Error: " + error.getMessage());
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(gson.toJson(query));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                assert jsonObject != null;
+                Iterator<String> iter = jsonObject.keys();
+                HashMap<String, String> hash = new HashMap<>();
+                while (iter.hasNext()) {
+                    String key = iter.next();
+                    try {
+                        params.put(key, jsonObject.getString(key));
+                    } catch (JSONException e) {
+                        // Something went wrong!
+                    }
+                }
+                return params;
+            }
+        };
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
+        AppController.getInstance().addToRequestQueue(postRequest);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

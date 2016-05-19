@@ -67,5 +67,6 @@
     <string name="strUsername">Username</string>
     <string name="strAddress">Address</string>
     <string name="strDateofbirth">Date of Birth</string>
+    <string name="strResultsQuery">"Resuts for: "</string>
 
 </resources>

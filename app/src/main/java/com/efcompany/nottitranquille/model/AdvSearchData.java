@@ -10,8 +10,8 @@ import java.util.List;
 public class AdvSearchData {
     private String nation;
     private String city;
-    private DateTime checkin;
-    private DateTime checkout;
+    private String checkin;
+    private String checkout;
     private String pricerange;
     private String locationtype;
     private int maxtenant;
@@ -43,19 +43,19 @@ public class AdvSearchData {
         this.city = city;
     }
 
-    public DateTime getCheckin() {
+    public String getCheckin() {
         return checkin;
     }
 
-    public void setCheckin(DateTime checkin) {
+    public void setCheckin(String checkin) {
         this.checkin = checkin;
     }
 
-    public DateTime getCheckout() {
+    public String getCheckout() {
         return checkout;
     }
 
-    public void setCheckout(DateTime checkout) {
+    public void setCheckout(String checkout) {
         this.checkout = checkout;
     }
 
@@ -74,4 +74,12 @@ public class AdvSearchData {
     public String getLocationtype() {return locationtype;}
 
     public void setLocationtype(String locationtype) {this.locationtype = locationtype;}
+
+    @Override
+    public String toString() {
+        //return super.toString();
+        return new StringBuffer()
+                .append(nation).append(city).append(checkin).append(checkout).append(pricerange)
+                .append(locationtype).append(maxtenant).toString();
+    }
 }

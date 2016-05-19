@@ -1,5 +1,7 @@
 package com.efcompany.nottitranquille.model;
 
+import com.efcompany.nottitranquille.R;
+
 import org.joda.time.DateTime;
 
 /**
@@ -49,4 +51,11 @@ public class SearchData {
     public String getPricerange() {return pricerange;}
 
     public void setPricerange(String pricerange) {this.pricerange = pricerange;}
+
+    @Override
+    public String toString() {
+        //return super.toString();
+        return new StringBuffer()
+                .append(nation).append(city).append(checkin).append(checkout).append(pricerange).toString();
+    }
 }
