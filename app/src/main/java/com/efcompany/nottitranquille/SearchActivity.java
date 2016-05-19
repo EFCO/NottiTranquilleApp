@@ -113,7 +113,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         //Get the URL
         SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
         site = sharedPref.getString("connectto", "");
-        if (site.equals("")){
+        if (site.equals("")) {
             Toast.makeText(this, R.string.strNoSite, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
@@ -156,7 +156,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position){
+        switch (position) {
             case 0:
                 query.setPricerange("Fino+a+100+euro");
                 break;
@@ -217,7 +217,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         showProgress(true);
-        if (v.getId()==bSearch.getId()){
+        if (v.getId() == bSearch.getId()) {
             nation = etNation.getText().toString();
             city = etCity.getText().toString();
             boolean cancel = false;
@@ -249,8 +249,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             else if (checkout.isBefore(checkin)) {
                 showProgress(false);
                 Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG).show();
-            }
-            else{
+            } else {
                 //Log.d("Date",new DateTime(dpCheckIn.getCalendarView().getDate()).toString() );
                 //Gather the data for the query
                 query.setNation(nation);
@@ -259,33 +258,56 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 query.setCheckout(checkout.toString("dd-MM-yyyy"));
                 //TODO Connect
                 StringRequest postRequest = new StringRequest(Request.Method.POST, site,
-                        new Response.Listener<String>()
-                        {
+                        new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                // response
-                                Log.d("Response", response);
+                                Log.i("Parser", response);
+                                try {
+                                    JSONObject json_response = new JSONObject(response);
+                                    if (json_response.getString(TAG_SUCCESS).equals("1")) {
+                                        // Locations found
+                                        // Getting Array of Locations
+                                        locsjson = json_response.getJSONArray(TAG_LOCATIONS);
+
+//                                    // Looping through All Locations
+//                                    for (int i = 0; i < locsjson.length(); i++) {
+//                                        locations.add(gson.fromJson(locsjson.getJSONObject(i).toString(), Location.class));
+//                                    }
+                                        showProgress(false);
+                                        Intent in = new Intent(SearchActivity.this, ResultsActivity.class);
+                                        in.putExtra("json", locsjson.toString());
+                                        in.putExtra("query", query.toString());
+                                        startActivity(in);
+
+
+                                    } else {
+                                        Toast.makeText(SearchActivity.this, R.string.strerrNoLocation, Toast.LENGTH_LONG).show();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
                         },
-                        new Response.ErrorListener()
-                        {
+                        new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 // error
-                                Log.d("Error.Response", error.getMessage());
+                                Log.d("Parser", error.getMessage());
                             }
                         }
                 ) {
                     @Override
-                    protected Map<String, String> getParams()
-                    {
-                        Map<String, String>  params = new HashMap<String, String>();
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
                         JSONObject jsonObject = null;
                         try {
                             jsonObject = new JSONObject(gson.toJson(query));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        assert jsonObject != null;
                         Iterator<String> iter = jsonObject.keys();
                         HashMap<String, String> hash = new HashMap<>();
                         while (iter.hasNext()) {
@@ -302,7 +324,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 AppController.getInstance().addToRequestQueue(postRequest);
             }
         }
-        if (v.getId()==bAdvancedSearch.getId()){
+        if (v.getId() == bAdvancedSearch.getId()) {
             // Starting new intent
             Intent in = new Intent(SearchActivity.this, AdvancedSearchActivity.class);
             // Sending info to next activity
@@ -311,7 +333,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             in.putExtra(TAG_CHECKIN, dpCheckIn.getCalendarView().getDate());
             in.putExtra(TAG_CHECKOUT, dpCheckOut.getCalendarView().getDate());
             in.putExtra(TAG_PRICERANGE, price);
-            in.putExtra(TAG_SOURCE,1);
+            in.putExtra(TAG_SOURCE, 1);
             // starting new activity
             startActivity(in);
         }
