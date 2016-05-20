@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -64,9 +66,11 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     CheckBox cbStrongBox;
     Button bAdvancedSearch;
     Button bSearch;
+    LinearLayout checkboxLayout;
 
+    ArrayList<String> commodities = new ArrayList<>();
     String[] priceRanges;
-    String[] locationTypes;
+    ArrayList<String> locationTypes;
     String[] maxTenants;
 
     String nation;
@@ -98,30 +102,117 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_search);
 
+        //Get the URL
+        SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
+        site = sharedPref.getString("connectto", "");
+        if (site.equals("")){
+            Toast.makeText(this, R.string.strNoSite, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ConnectionActivity.class);
+            startActivity(intent);
+        }
+
+        checkboxLayout = (LinearLayout) findViewById(R.id.checkboxLayout);
+        spLocationType = (Spinner) findViewById(R.id.spLocationType);
+
+        final StringRequest comm_request = new StringRequest(Request.Method.POST, site + "/api/getSetting.jsp",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("Parser", response);
+                        try {
+                            JSONObject json_response = new JSONObject(response);
+                            Iterator<String> iter = json_response.keys();
+                            while (iter.hasNext()) {
+                                String key = iter.next();
+                                CheckBox ch = new CheckBox(AdvancedSearchActivity.this);
+                                ch.setText(json_response.getString(key));
+                                checkboxLayout.addView(ch);
+                                commodities.add(key);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Parser", error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                 params.put("setting", "commodities");
+                return params;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(comm_request);
+
+        final StringRequest loctype_request = new StringRequest(Request.Method.POST, site + "/api/getSetting.jsp",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("Parser", response);
+                        try {
+                            JSONObject json_response = new JSONObject(response);
+                            Iterator<String> iter = json_response.keys();
+                            locationTypes = new ArrayList<>();
+                            while (iter.hasNext()) {
+                                String key = iter.next();
+                                locationTypes.add(key);
+                            }
+                            ArrayAdapter<String> ladapter = new ArrayAdapter<String>(AdvancedSearchActivity.this,
+                                    android.R.layout.simple_spinner_dropdown_item, locationTypes);
+                            spLocationType.setAdapter(ladapter);
+                            spLocationType.setOnItemSelectedListener(AdvancedSearchActivity.this);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Parser", error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("setting", "locationtypes");
+                return params;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(loctype_request);
+
+
         etNation = (EditText) findViewById(R.id.etNation);
         etCity = (EditText) findViewById(R.id.etCity);
         dpCheckIn = (DatePicker) findViewById(R.id.dpCheckIn);
         dpCheckOut = (DatePicker) findViewById(R.id.dpCheckOut);
         spPriceRange = (Spinner) findViewById(R.id.spPriceRange);
-        spLocationType = (Spinner) findViewById(R.id.spLocationType);
         spMaxTenants = (Spinner) findViewById(R.id.spMaxTenants);
-        cbWiFi = (CheckBox) findViewById(R.id.cbWiFi);
-        cbAirConditioner = (CheckBox) findViewById(R.id.cbAirConditioner);
-        cbStrongBox = (CheckBox) findViewById(R.id.cbStrongBox);
         bSearch = (Button) findViewById(R.id.bSearch);
 
         query = new AdvSearchData();
 
         priceRanges = new String[]{getString(R.string.strAny), getString(R.string.strBelow100), getString(R.string.strBelow200),
                 getString(R.string.strBelow500), getString(R.string.strOver500)};
-        locationTypes = new String[] {getString(R.string.strAny),getString(R.string.strBedandBreakfast), getString(R.string.strHotel),
-                getString(R.string.strRural)};
         maxTenants = new String[] {"1","2","3","4","5"};
 
         ArrayAdapter<String> padapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, priceRanges);
-        ArrayAdapter<String> ladapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationTypes);
+
         ArrayAdapter<String> tadapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, maxTenants);
 
@@ -161,25 +252,13 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             }
         }
 
-        //Get the URL
-        SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
-        site = sharedPref.getString("connectto", "");
-        if (site.equals("")){
-            Toast.makeText(this, R.string.strNoSite, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, ConnectionActivity.class);
-            startActivity(intent);
-        }
-        //site += "/Advsearch.php";
-        site += "/api/search.jsp";
+
 
         gson = new Gson();
 
 
         spPriceRange.setAdapter(padapter);
         spPriceRange.setOnItemSelectedListener(this);
-
-        spLocationType.setAdapter(ladapter);
-        spLocationType.setOnItemSelectedListener(this);
 
         spMaxTenants.setAdapter(tadapter);
         spMaxTenants.setOnItemSelectedListener(this);
@@ -232,20 +311,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
 
         }
         else if (parent.getId()==spLocationType.getId()){
-            switch (position){
-                case 0:
-                    query.setLocationtype("Any");
-                    break;
-                case 1:
-                    query.setLocationtype("BedBreakfast");
-                    break;
-                case 2:
-                    query.setLocationtype("Hotel");
-                    break;
-                case 3:
-                    query.setLocationtype("Rural");
-                    break;
-            }
+            query.setLocationtype(spLocationType.getSelectedItem().toString());
         }
         else if (parent.getId()==spMaxTenants.getId()){
             query.setMaxtenant(position);
@@ -288,20 +354,26 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         query.setCheckout(checkout.toString("dd-MM-yyyy"));
 
         //TODO Trovare modo per usare elenco automatico
-        List<String> commodities = new ArrayList<>();
-        if (cbWiFi.isChecked()){
-            commodities.add("WiFi=on");
+        for (int i = 0; i < checkboxLayout.getChildCount(); i++) {
+            CheckBox ch = (CheckBox) checkboxLayout.getChildAt(i);
+            if (ch.isChecked()) {
+                query.getCommodities().add(ch.getText().toString());
+            }
         }
-        if (cbAirConditioner.isChecked()){
-            commodities.add("AirConditioner=on");
-        }
-        if (cbStrongBox.isChecked()){
-            commodities.add("StrongBox=on");
-        }
-        query.setCommodities(commodities);
+//        List<String> commodities = Arrays.asList("0","0","0"); //TODO Gli elementi devono essere tanti quanti i campi
+//        if (cbWiFi.isChecked()){
+//            commodities.set(0,"1");
+//        }
+//        if (cbAirConditioner.isChecked()){
+//            commodities.set(1,"1");
+//        }
+//        if (cbStrongBox.isChecked()){
+//            commodities.set(2,"1");
+//        }
+//        query.setCommodities(commodities);
 
         //TODO Connect
-        StringRequest postRequest = new StringRequest(Request.Method.POST, site,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, site + "/api/search.jsp",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -356,6 +428,12 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
                 HashMap<String, String> hash = new HashMap<>();
                 while (iter.hasNext()) {
                     String key = iter.next();
+                    if (key.equals("commodities")) {
+                        for (String elem: query.getCommodities()) {
+                            params.put(elem.toString(),"on");
+                        }
+                        continue;
+                    }
                     try {
                         params.put(key, jsonObject.getString(key));
                     } catch (JSONException e) {

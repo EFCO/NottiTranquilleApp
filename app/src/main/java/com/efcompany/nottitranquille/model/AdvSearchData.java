@@ -2,6 +2,7 @@ package com.efcompany.nottitranquille.model;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class AdvSearchData {
     private String pricerange;
     private String locationtype;
     private int maxtenant;
-    private List<String> commodities;
+    private ArrayList<String> commodities = new ArrayList<>();
 
     private String search = "advsearch";
 
@@ -59,11 +60,11 @@ public class AdvSearchData {
         this.checkout = checkout;
     }
 
-    public List<String> getCommodities() {
+    public ArrayList<String> getCommodities() {
         return commodities;
     }
 
-    public void setCommodities(List<String> commodities) {
+    public void setCommodities(ArrayList<String> commodities) {
         this.commodities = commodities;
     }
 
