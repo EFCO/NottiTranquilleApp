@@ -58,6 +58,7 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
     private static final String TAG_NAME = "name";
     private static final String TAG_IMAGE = "image";
     private static final String TAG_TYPE = "type";
+    private static final String TAG_ID = "id";
 
 
     String what = TAG_NATION;
@@ -145,9 +146,9 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
         ListAdapter adapter = new SimpleAdapter(
                 this, locationsList,
                 R.layout.list_results, new String[]{
-                TAG_NATION, TAG_CITY, TAG_NAME, TAG_TYPE, TAG_PRICERANGE, TAG_IMAGE},
+                TAG_NATION, TAG_CITY, TAG_NAME, TAG_TYPE, TAG_PRICERANGE, TAG_IMAGE, TAG_ID},
                 new int[]{R.id.tvResNation, R.id.tvResCity, R.id.tvResName, R.id.tvResType, R.id.tvResPrice,
-                        R.id.ivResImage1});
+                        R.id.ivResImage1, R.id.tvResID});
         // Updating listview
         lv.setAdapter(adapter);
 
@@ -167,6 +168,18 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
         //Set Listeners
         orderby.setOnItemSelectedListener(ResultsActivity.this);
         ascDesc.setOnItemSelectedListener(ResultsActivity.this);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                                      @Override
+                                      public void onItemClick(AdapterView<?> parent, View view,
+                                                              int position, long id) {
+                                          Intent in = new Intent(ResultsActivity.this, LocationActivity.class);
+                                          String resID = ((TextView) view.findViewById(R.id.tvResID)).getText().toString();
+                                          in.putExtra(TAG_ID, resID);
+                                          startActivity(in);
+                                      }
+                                  });
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.

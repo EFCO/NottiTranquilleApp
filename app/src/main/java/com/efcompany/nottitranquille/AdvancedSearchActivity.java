@@ -114,6 +114,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         checkboxLayout = (LinearLayout) findViewById(R.id.checkboxLayout);
         spLocationType = (Spinner) findViewById(R.id.spLocationType);
 
+        //Get the list of available commodities
         final StringRequest comm_request = new StringRequest(Request.Method.POST, site + "/api/getSetting.jsp",
                 new Response.Listener<String>() {
                     @Override
@@ -154,6 +155,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
 
         AppController.getInstance().addToRequestQueue(comm_request);
 
+        //Get the list of available location types
         final StringRequest loctype_request = new StringRequest(Request.Method.POST, site + "/api/getSetting.jsp",
                 new Response.Listener<String>() {
                     @Override

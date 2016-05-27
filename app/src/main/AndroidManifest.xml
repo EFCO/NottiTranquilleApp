@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
         android:name=".extratools.AppController"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
@@ -22,24 +22,29 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"/>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".ConnectionActivity"
-            android:label="@string/title_activity_connection"/>
+            android:label="@string/title_activity_connection" />
         <activity
             android:name=".SearchActivity"
-            android:label="@string/title_activity_search"/>
+            android:label="@string/title_activity_search" />
         <activity
             android:name=".ResultsActivity"
-            android:label="@string/title_activity_results"/>
+            android:label="@string/title_activity_results" />
         <activity
             android:name=".AdvancedSearchActivity"
-            android:label="@string/title_activity_advanced_search"/>
-        <activity android:name=".RegistrationActivity"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+            android:label="@string/title_activity_advanced_search" />
+        <activity android:name=".RegistrationActivity" />
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".LocationActivity"></activity>
     </application>
 
 </manifest>
