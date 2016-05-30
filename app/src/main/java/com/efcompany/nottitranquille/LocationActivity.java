@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,14 +31,33 @@ import java.util.Map;
 
 public class LocationActivity extends AppCompatActivity {
 
+    ImageView ivMainImage;
+    TextView tvPrice;
+    Button bBook;
+    TextView tvDescription;
+    TextView tvGuests;
+    TextView tvBathrooms;
+    TextView tvBeds;
+    TextView tvBedrooms;
+    Button bPhotos;
+    Button bReviews;
+
     String locID;
 
     // JSON Node names
     private static final String TAG_SUCCESS = "code";
     private static final String TAG_ID = "id";
     private static final String TAG_LOCATION = "location";
+    private static final String TAG_MAINIMAGE = "mainimage";
+    private static final String TAG_PRICE = "price";
+    private static final String TAG_DESCRIPTION = "description";
+    private static final String TAG_GUESTS = "guests";
+    private static final String TAG_BATHROOMS = "bathrooms";
+    private static final String TAG_BEDS = "beds";
+    private static final String TAG_BEDROOMS = "bedrooms";
+    private static final String TAG_COMMODITIES = "commodities";
 
-    JSONArray locsjson = null;
+    JSONObject locsjson = null;
 
     // Progress Dialog
     View mProgressView;
@@ -44,6 +66,17 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+
+        ivMainImage = (ImageView) findViewById(R.id.ivMainImage);
+        tvPrice = (TextView) findViewById(R.id.tvPrice);
+        bBook = (Button) findViewById(R.id.bBook);
+        tvDescription = (TextView) findViewById(R.id.tvDescription);
+        tvGuests = (TextView) findViewById(R.id.tvGuests);
+        tvBathrooms = (TextView) findViewById(R.id.tvBathrooms);
+        tvBeds = (TextView) findViewById(R.id.tvBeds);
+        tvBedrooms = (TextView) findViewById(R.id.tvBedrooms);
+        bPhotos = (Button) findViewById(R.id.bPhotos);
+        bReviews = (Button) findViewById(R.id.bReviews);
 
 
         // Getting result details from intent
@@ -75,9 +108,17 @@ public class LocationActivity extends AppCompatActivity {
                             if (json_response.getString(TAG_SUCCESS).equals("1")) {
                                 // Location found
                                 // Getting Location details
-                                locsjson = json_response.getJSONArray(TAG_LOCATION);
+                                locsjson = json_response.getJSONObject(TAG_LOCATION);
 
                                 //TODO: show on screen
+                               // ivMainImage
+                                tvPrice.append(locsjson.getString(TAG_PRICE));
+                                tvDescription.append(locsjson.getString(TAG_DESCRIPTION));
+                                tvGuests.append(locsjson.getString(TAG_GUESTS));
+                                tvBathrooms.append(locsjson.getString(TAG_BATHROOMS));
+                                tvBeds.append(locsjson.getString(TAG_BEDS));
+                                tvBedrooms.append(locsjson.getString(TAG_BEDROOMS));
+                                //commodities
 
                             } else {
                                 Toast.makeText(LocationActivity.this, R.string.strerrNoLocation, Toast.LENGTH_LONG).show();

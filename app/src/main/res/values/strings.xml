@@ -68,5 +68,8 @@
     <string name="strAddress">Address</string>
     <string name="strDateofbirth">Date of Birth</string>
     <string name="strResultsQuery">"Resuts for: "</string>
+    <string name="strBook">Book Now!</string>
+    <string name="strPhotos">Photos</string>
+    <string name="strreviews">Reviews</string>
 
 </resources>
