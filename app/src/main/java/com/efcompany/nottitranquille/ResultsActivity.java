@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 public class ResultsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -150,20 +152,18 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
                 new int[]{R.id.tvResNation, R.id.tvResCity, R.id.tvResName, R.id.tvResType, R.id.tvResPrice,
                         R.id.ivResImage1, R.id.tvResID});
         // Updating listview
-        lv.setAdapter(adapter);
-
-        /*lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            //TODO: trovare modo prendere id. O oggetto
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // Getting values from selected ListItem
-                String LocID = ((TextView) view.findViewById(R.id.tvAthlSurname)).getText()
-                        .toString();
-                listener.onAthleteSelected(name, surname);
-            }
-        });*/
+//        lv.setAdapter(adapter);
+//
+//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                Intent in = new Intent(ResultsActivity.this, LocationActivity.class);
+//                HashMap<String,String> item = locationsList.get(position);
+//                startActivity(in);
+//            }
+//        });
 
         //Set Listeners
         orderby.setOnItemSelectedListener(ResultsActivity.this);
@@ -171,15 +171,16 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                                      @Override
-                                      public void onItemClick(AdapterView<?> parent, View view,
-                                                              int position, long id) {
-                                          Intent in = new Intent(ResultsActivity.this, LocationActivity.class);
-                                          String resID = ((TextView) view.findViewById(R.id.tvResID)).getText().toString();
-                                          in.putExtra(TAG_ID, resID);
-                                          startActivity(in);
-                                      }
-                                  });
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Log.d("ciao","cliccasti!");
+                Intent in = new Intent(ResultsActivity.this, LocationActivity.class);
+                String resID = ((TextView) view.findViewById(R.id.tvResID)).getText().toString();
+                in.putExtra(TAG_ID, resID);
+                startActivity(in);
+            }
+        });
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.

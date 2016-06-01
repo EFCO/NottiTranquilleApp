@@ -432,7 +432,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
                     String key = iter.next();
                     if (key.equals("commodities")) {
                         for (String elem: query.getCommodities()) {
-                            params.put(elem.toString(),"on");
+                            params.put(elem.toString().toLowerCase(),"on");
                         }
                         continue;
                     }

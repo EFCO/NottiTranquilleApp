@@ -48,6 +48,7 @@ public class LocationActivity extends AppCompatActivity {
     private static final String TAG_SUCCESS = "code";
     private static final String TAG_ID = "id";
     private static final String TAG_LOCATION = "location";
+    private static final String TAG_ADDRESS = "address";
     private static final String TAG_MAINIMAGE = "mainimage";
     private static final String TAG_PRICE = "price";
     private static final String TAG_DESCRIPTION = "description";
@@ -92,7 +93,7 @@ public class LocationActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
         }
-        site += "/api/search.jsp";
+        site += "/api/showOffer.jsp";
 
         // Show a progress spinner, and perform the conection attempt.
         mProgressView = findViewById(R.id.locationProgress);
