@@ -148,9 +148,9 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
         ListAdapter adapter = new SimpleAdapter(
                 this, locationsList,
                 R.layout.list_results, new String[]{
-                TAG_NATION, TAG_CITY, TAG_NAME, TAG_TYPE, TAG_PRICERANGE, TAG_IMAGE, TAG_ID},
-                new int[]{R.id.tvResNation, R.id.tvResCity, R.id.tvResName, R.id.tvResType, R.id.tvResPrice,
-                        R.id.ivResImage1, R.id.tvResID});
+                TAG_NATION, TAG_CITY, TAG_NAME, TAG_TYPE, TAG_PRICERANGE, TAG_ID, TAG_IMAGE},
+                new int[]{R.id.tvResNation, R.id.tvResCity, R.id.tvResName, R.id.tvResType, R.id.tvResPrice, R.id.tvResID,
+                        R.id.ivResImage1});
         // Updating listview
 //        lv.setAdapter(adapter);
 //

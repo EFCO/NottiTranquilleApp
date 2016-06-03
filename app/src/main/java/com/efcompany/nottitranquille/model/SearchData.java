@@ -56,6 +56,6 @@ public class SearchData {
     public String toString() {
         //return super.toString();
         return new StringBuffer()
-                .append(nation).append(city).append(checkin).append(checkout).append(pricerange).toString();
+                .append(nation+" ").append(city+" ").append(checkin+" ").append(checkout+" ").append(pricerange+" ").toString();
     }
 }

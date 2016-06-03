@@ -80,7 +80,7 @@ public class AdvSearchData {
     public String toString() {
         //return super.toString();
         return new StringBuffer()
-                .append(nation).append(city).append(checkin).append(checkout).append(pricerange)
-                .append(locationtype).append(maxtenant).toString();
+                .append(nation+" ").append(city+" ").append(checkin+" ").append(checkout+" ").append(pricerange+" ")
+                .append(locationtype+" ").append(maxtenant).toString();
     }
 }

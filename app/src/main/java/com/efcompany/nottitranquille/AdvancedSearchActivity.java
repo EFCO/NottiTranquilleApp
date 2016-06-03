@@ -208,7 +208,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
 
         query = new AdvSearchData();
 
-        priceRanges = new String[]{getString(R.string.strAny), getString(R.string.strBelow100), getString(R.string.strBelow200),
+        priceRanges = new String[]{ getString(R.string.strBelow100), getString(R.string.strBelow200),
                 getString(R.string.strBelow500), getString(R.string.strOver500)};
         maxTenants = new String[] {"1","2","3","4","5"};
 
@@ -399,6 +399,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
 
 
                             } else {
+                                showProgress(false);
                                 Toast.makeText(AdvancedSearchActivity.this, R.string.strerrNoLocation, Toast.LENGTH_LONG).show();
                             }
 

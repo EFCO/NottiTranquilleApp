@@ -281,6 +281,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
 
                                     } else {
+                                        showProgress(false);
                                         Toast.makeText(SearchActivity.this, R.string.strerrNoLocation, Toast.LENGTH_LONG).show();
                                     }
 
