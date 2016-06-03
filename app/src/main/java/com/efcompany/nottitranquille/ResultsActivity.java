@@ -90,15 +90,15 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
 
         query.setText(i.getStringExtra("query"));
 
-        //Get site
-        SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
-        String site = sharedPref.getString("connectto", "");
-        if (site.equals("")) {
-            Toast.makeText(this, "Insert the site", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, ConnectionActivity.class);
-            startActivity(intent);
-        }
-        site += "/api/search.jsp";
+//        //Get site
+//        SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
+//        String site = sharedPref.getString("connectto", "");
+//        if (site.equals("")) {
+//            Toast.makeText(this, "Insert the site", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(this, ConnectionActivity.class);
+//            startActivity(intent);
+//        }
+//        site += "/api/search.jsp";
 
         ArrayAdapter<String> wadapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, orderWhat);
@@ -113,7 +113,7 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
         // Hashmap for ListView
         locationsList = new ArrayList<HashMap<String, String>>();
 
-        //TODO: Riempire locationsList da Intent
+
         String locjson = i.getStringExtra("json");
 
         JSONArray json = null;
@@ -177,7 +177,15 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
                 Log.d("ciao","cliccasti!");
                 Intent in = new Intent(ResultsActivity.this, LocationActivity.class);
                 String resID = ((TextView) view.findViewById(R.id.tvResID)).getText().toString();
+                String resName = ((TextView) view.findViewById(R.id.tvResName)).getText().toString();
+                String resNation = ((TextView) view.findViewById(R.id.tvResNation)).getText().toString();
+                String resCity = ((TextView) view.findViewById(R.id.tvResCity)).getText().toString();
+                String resType = ((TextView) view.findViewById(R.id.tvResType)).getText().toString();
                 in.putExtra(TAG_ID, resID);
+                in.putExtra(TAG_NAME, resName);
+                in.putExtra(TAG_TYPE, resType);
+                in.putExtra(TAG_NATION, resNation);
+                in.putExtra(TAG_CITY, resCity);
                 startActivity(in);
             }
         });

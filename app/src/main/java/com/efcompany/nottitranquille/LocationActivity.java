@@ -31,6 +31,12 @@ import java.util.Map;
 
 public class LocationActivity extends AppCompatActivity {
 
+    TextView tvID;
+    TextView tvName;
+    TextView tvType;
+    TextView tvNation;
+    TextView tvCity;
+    TextView tvAddress;
     ImageView ivMainImage;
     TextView tvPrice;
     Button bBook;
@@ -43,6 +49,10 @@ public class LocationActivity extends AppCompatActivity {
     Button bReviews;
 
     String locID;
+    String locName;
+    String locType;
+    String locNation;
+    String locCity;
 
     // JSON Node names
     private static final String TAG_SUCCESS = "code";
@@ -57,6 +67,11 @@ public class LocationActivity extends AppCompatActivity {
     private static final String TAG_BEDS = "beds";
     private static final String TAG_BEDROOMS = "bedrooms";
     private static final String TAG_COMMODITIES = "commodities";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_NATION = "nation";
+    private static final String TAG_CITY = "city";
+    private static final String TAG_TYPE = "type";
+
 
     JSONObject locsjson = null;
 
@@ -68,6 +83,12 @@ public class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+        tvID =  (TextView) findViewById(R.id.tvID);
+        tvName =  (TextView) findViewById(R.id.tvName);
+        tvType =  (TextView) findViewById(R.id.tvType);
+        tvNation =  (TextView) findViewById(R.id.tvNation);
+        tvCity =  (TextView) findViewById(R.id.tvCity);
+        tvAddress =  (TextView) findViewById(R.id.tvAddress);
         ivMainImage = (ImageView) findViewById(R.id.ivMainImage);
         tvPrice = (TextView) findViewById(R.id.tvPrice);
         bBook = (Button) findViewById(R.id.bBook);
@@ -83,6 +104,10 @@ public class LocationActivity extends AppCompatActivity {
         // Getting result details from intent
         Intent i = getIntent();
         locID =i.getStringExtra(TAG_ID);
+        locName = i.getStringExtra(TAG_NAME);
+        locType = i.getStringExtra(TAG_TYPE);
+        locNation = i.getStringExtra(TAG_NATION);
+        locCity = i.getStringExtra(TAG_CITY);
 
 
         //Get site
@@ -113,6 +138,12 @@ public class LocationActivity extends AppCompatActivity {
 
                                 //TODO: show on screen
                                // ivMainImage
+                                tvID.append(locID);
+                                tvName.append(locName);
+                                tvType.append(locType);
+                                tvNation.append(locNation);
+                                tvCity.append(locCity);
+                                tvAddress.append(locsjson.getString(TAG_ADDRESS));
                                 tvPrice.append(locsjson.getString(TAG_PRICE));
                                 tvDescription.append(locsjson.getString(TAG_DESCRIPTION));
                                 tvGuests.append(locsjson.getString(TAG_GUESTS));
