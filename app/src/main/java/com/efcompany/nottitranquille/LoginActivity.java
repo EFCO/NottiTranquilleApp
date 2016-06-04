@@ -19,11 +19,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.efcompany.nottitranquille.extratools.AppController;
 
 import org.json.JSONException;
@@ -32,7 +35,9 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,6 +56,11 @@ public class LoginActivity extends AppCompatActivity {
     String email;
 
     static final int LOG_IN = 1;
+
+    private static final String TAG_SUCCESS = "code";
+
+
+    Map<String, String> fields = new HashMap<String, String>();
 
 
     @Override
@@ -154,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Map<String, String> fields = new HashMap<String, String>();
+
                  //TODO Da rimettere per permettere connessione sia con mail che con username
                     //fields.put("mail", email);
                     fields.put("username", email);
@@ -165,25 +175,32 @@ public class LoginActivity extends AppCompatActivity {
 
 
             //Call to the server and response handling
-            JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                    site, new JSONObject(fields), new Response.Listener<JSONObject>() {
+            StringRequest postRequest = new StringRequest(Request.Method.POST,
+                    site,  new Response.Listener<String>() {
 
                 @Override
-                public void onResponse(JSONObject response) {
+                public void onResponse(String response) {
                         try {
-                            VolleyLog.v("Response:%n %s", response.toString(4));
-                            if (response.getString("code").equals("1")) {
-                                if (getParent() == null) {
-                                    setResult(Activity.RESULT_OK);
+                            VolleyLog.v("Response:%n %s", response);
+                            try {
+                                JSONObject json_response = new JSONObject(response);
+                                if (json_response.getString(TAG_SUCCESS).equals("1")) {
+                                    // Person found
+                                    if (getParent() == null) {
+                                        setResult(Activity.RESULT_OK);
+                                    } else {
+                                        getParent().setResult(Activity.RESULT_OK);
+                                    }
+                                    finish();
+
                                 } else {
-                                    getParent().setResult(Activity.RESULT_OK);
+                                    mPasswordView.setError(json_response.getString("message"));
                                 }
-                                finish();
-                            } else{
-                                //mPasswordView.setError(getString(R.string.strerrWrongMailOrPass));
-                                mPasswordView.setError(response.getString("message"));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -202,10 +219,46 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, R.string.strerrVolleyConnection, Toast.LENGTH_LONG).show();
                 }
             }
-            );
+            ){
+
+                @Override
+                protected Map<String, String> getParams() {
+
+                    return fields;
+                }
+
+                /* (non-Javadoc)
+    * @see com.android.volley.toolbox.StringRequest#parseNetworkResponse(com.android.volley.NetworkResponse)
+    */
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    // since we don't know which of the two underlying network vehicles
+                    // will Volley use, we have to handle and store session cookies manually
+                    AppController.get().checkSessionCookie(response.headers);
+
+                    return super.parseNetworkResponse(response);
+                }
+
+                /* (non-Javadoc)
+                 * @see com.android.volley.Request#getHeaders()
+                 */
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = super.getHeaders();
+
+                    if (headers == null
+                            || headers.equals(Collections.emptyMap())) {
+                        headers = new HashMap<String, String>();
+                    }
+
+                    AppController.get().addSessionCookie(headers);
+
+                    return headers;
+                }};
 
             // Adding request to request queue
-            AppController.getInstance().addToRequestQueue(jsonObjReq);
+            AppController.getInstance().addToRequestQueue(postRequest);
         }
         }
 
