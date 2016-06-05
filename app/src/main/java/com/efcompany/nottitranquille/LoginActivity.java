@@ -56,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
     String email;
 
     static final int LOG_IN = 1;
+    static final int CONNECT = 2;
+    static final int REGISTRATION = 3;
 
     private static final String TAG_SUCCESS = "code";
 
@@ -311,12 +313,15 @@ public class LoginActivity extends AppCompatActivity {
 
         if (id ==R.id.connection_settings){
             Intent intent = new Intent(this, ConnectionActivity.class);
-            startActivityForResult(intent, LOG_IN);
+            startActivityForResult(intent, CONNECT);
         }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id ==R.id.connection_settings){
+            Intent intent = new Intent(this, ConnectionActivity.class);
+            startActivityForResult(intent, CONNECT);
+        }
+        if (id ==R.id.signup_settings){
+            Intent intent = new Intent(this, RegistrationActivity.class);
+            startActivityForResult(intent, REGISTRATION);
         }
 
         return super.onOptionsItemSelected(item);

@@ -53,4 +53,12 @@
     <string name="strName">Nome</string>
     <string name="strPrice">Prezzo</string>
     <string name="strerrNoLocation">Nessuna Locazione Corrispondente Trovata</string>
+    <string name="strAddress">Indirizzo</string>
+    <string name="strBook">Prenota ora!</string>
+    <string name="strDateofbirth">Data di Nascita</string>
+    <string name="strPhotos">Foto</string>
+    <string name="strResultsQuery">Risultati per:</string>
+    <string name="strType">Tipologia</string>
+    <string name="strUsername">Username</string>
+    <string name="strreviews">Recensioni</string>
 </resources>

@@ -39,6 +39,10 @@ import java.util.Map;
 
 public class RegistrationActivity extends Activity {
 
+    static final int LOG_IN = 1;
+    static final int CONNECT = 2;
+    static final int REGISTRATION = 3;
+
     // UI references.
     EditText mEmailView;
     EditText mPasswordView;
@@ -56,7 +60,6 @@ public class RegistrationActivity extends Activity {
     private String codedPassword;
     String email;
 
-    static final int REGISTRATION = 1;
 
     private static final String TAG_SUCCESS = "code";
 
@@ -66,6 +69,7 @@ public class RegistrationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        Log.d("Registration", "Dentro");
 
         //Get the URL
         SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
@@ -87,8 +91,8 @@ public class RegistrationActivity extends Activity {
         mAddressView = (EditText) findViewById(R.id.etAddress);
         mDateofbirthView = (EditText) findViewById(R.id.etDateofbirth);
         mProgressView = findViewById(R.id.registration_progress);
-        mEmailRegistrationFormView = findViewById(R.id.email_login_form);
-        mEmailRegisterButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailRegistrationFormView = findViewById(R.id.email_registration_form);
+        mEmailRegisterButton = (Button) findViewById(R.id.email_registration_button);
         mEmailRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +102,7 @@ public class RegistrationActivity extends Activity {
     }
 
     public void attemptRegistration() {
+        Log.d("Registration", "Attempt");
 
         // Reset errors.
         mEmailView.setError(null);
@@ -192,7 +197,7 @@ public class RegistrationActivity extends Activity {
                 e.printStackTrace();
             }
 
-            
+
             fields.put("mail", email);
             fields.put("password", codedPassword);
             fields.put("username", username);
@@ -211,6 +216,7 @@ public class RegistrationActivity extends Activity {
 
                 @Override
                 public void onResponse(String response) {
+                    Log.d("Registration", "OnResponse");
                     try {
                         VolleyLog.v("Response:%n %s", response);
                         try {
@@ -338,12 +344,15 @@ public class RegistrationActivity extends Activity {
 
         if (id ==R.id.connection_settings){
             Intent intent = new Intent(this, ConnectionActivity.class);
-            startActivityForResult(intent, REGISTRATION);
+            startActivityForResult(intent, CONNECT);
         }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id ==R.id.connection_settings){
+            Intent intent = new Intent(this, ConnectionActivity.class);
+            startActivityForResult(intent, CONNECT);
+        }
+        if (id ==R.id.signup_settings){
+            Intent intent = new Intent(this, RegistrationActivity.class);
+            startActivityForResult(intent, REGISTRATION);
         }
 
         return super.onOptionsItemSelected(item);

@@ -54,6 +54,10 @@ import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    static final int LOG_IN = 1;
+    static final int CONNECT = 2;
+    static final int REGISTRATION = 3;
+
     EditText etNation;
     EditText etCity;
     DatePicker dpCheckIn;
@@ -131,29 +135,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         bAdvancedSearch.setOnClickListener(this);
         bSearch.setOnClickListener(this);
-    }
-
-    //TODO Non gli piacciono i metodi tradizionali. scoprire cosa vuole oggigiorno
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -393,4 +374,46 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == LOG_IN) {
+            // Make sure the request was successful
+            if (resultCode != RESULT_OK) {
+                finish();
+            }
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id ==R.id.connection_settings){
+            Intent intent = new Intent(this, ConnectionActivity.class);
+            startActivityForResult(intent, CONNECT);
+        }
+        if (id ==R.id.login_settings){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, LOG_IN);
+        }
+        if (id ==R.id.signup_settings){
+            Intent intent = new Intent(this, RegistrationActivity.class);
+            startActivityForResult(intent, REGISTRATION);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

@@ -110,12 +110,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    //TODO Non gli piacciono i metodi tradizionali. scoprire cosa vuole oggigiorno
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        Log.d("Options","Menu");
         return true;
     }
 
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (id ==R.id.connection_settings){
             Intent intent = new Intent(this, ConnectionActivity.class);
-            startActivityForResult(intent, LOG_IN);
+            startActivityForResult(intent, CONNECT);
         }
         if (id ==R.id.login_settings){
             logIn();
@@ -137,11 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, RegistrationActivity.class);
             startActivityForResult(intent, REGISTRATION);
         }
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

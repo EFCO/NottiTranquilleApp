@@ -11,7 +11,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is mandatory</string>
-    <string name="strsignup">Sign up</string>
+    <string name="strsignup">Sign Up</string>
 
     <string name="action_settings">Settings</string>
     <string name="tvOrderby">Order by</string>
@@ -67,7 +67,7 @@
     <string name="strUsername">Username</string>
     <string name="strAddress">Address</string>
     <string name="strDateofbirth">Date of Birth</string>
-    <string name="strResultsQuery">"Resuts for: "</string>
+    <string name="strResultsQuery">Results for: </string>
     <string name="strBook">Book Now!</string>
     <string name="strPhotos">Photos</string>
     <string name="strreviews">Reviews</string>
