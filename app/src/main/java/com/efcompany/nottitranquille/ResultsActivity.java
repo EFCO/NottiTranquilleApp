@@ -152,7 +152,7 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
                 new int[]{R.id.tvResNation, R.id.tvResCity, R.id.tvResName, R.id.tvResType, R.id.tvResPrice, R.id.tvResID,
                         R.id.ivResImage1});
         // Updating listview
-//        lv.setAdapter(adapter);
+        lv.setAdapter(adapter);
 //
 //        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //
@@ -174,7 +174,6 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Log.d("ciao","cliccasti!");
                 Intent in = new Intent(ResultsActivity.this, LocationActivity.class);
                 String resID = ((TextView) view.findViewById(R.id.tvResID)).getText().toString();
                 String resName = ((TextView) view.findViewById(R.id.tvResName)).getText().toString();
@@ -264,9 +263,9 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
             ListAdapter adapter = new SimpleAdapter(
                     this, locationsList,
                     R.layout.list_results, new String[]{
-                    TAG_NATION, TAG_CITY, TAG_NAME, TAG_TYPE, TAG_PRICERANGE, TAG_IMAGE},
+                    TAG_NATION, TAG_CITY, TAG_NAME, TAG_TYPE, TAG_PRICERANGE, TAG_IMAGE, TAG_ID},
                     new int[]{R.id.tvResNation, R.id.tvResCity, R.id.tvResName, R.id.tvResType, R.id.tvResPrice,
-                            R.id.ivResImage1});
+                            R.id.ivResImage1,R.id.tvResID});
             // Updating listview
             lv.setAdapter(adapter);
 

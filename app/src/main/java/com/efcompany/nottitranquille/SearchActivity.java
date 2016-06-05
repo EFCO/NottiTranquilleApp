@@ -344,13 +344,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> headers = super.getHeaders();
 
-                        if (headers == null
-                                || headers.equals(Collections.emptyMap())) {
+                        if (headers == null || headers.equals(Collections.emptyMap())) {
                             headers = new HashMap<String, String>();
                         }
 
                         AppController.get().addSessionCookie(headers);
-
                         return headers;
                     }
                 };

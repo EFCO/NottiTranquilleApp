@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,7 +36,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         //mRequestQueue = Volley.newRequestQueue(this);
 
     }
@@ -75,18 +76,19 @@ public class AppController extends Application {
      * @param headers Response Headers.
      */
     public final void checkSessionCookie(Map<String, String> headers) {
-        if (headers.containsKey(SET_COOKIE_KEY)
-                && headers.get(SET_COOKIE_KEY).startsWith(SESSION_COOKIE)) {
-            String cookie = headers.get(SET_COOKIE_KEY);
-            if (cookie.length() > 0) {
-                String[] splitCookie = cookie.split(";");
-                String[] splitSessionId = splitCookie[0].split("=");
-                cookie = splitSessionId[1];
-                SharedPreferences.Editor prefEditor = mPreferences.edit();
-                prefEditor.putString(SESSION_COOKIE, cookie);
-                prefEditor.commit();
-            }
+        String cookie = headers.get(SET_COOKIE_KEY);
+        if (cookie == null) {
+            //the server did not return a cookie so we wont have anything to save
+            return;
         }
+        SharedPreferences prefs = mPreferences;
+        if (null == prefs) {
+            return;
+        }
+
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(COOKIE_KEY, cookie);
+        editor.commit();
     }
 
     /**
@@ -94,19 +96,36 @@ public class AppController extends Application {
      *
      * @param headers
      */
-    public final void addSessionCookie(Map<String, String> headers) {
-        String sessionId = mPreferences.getString(SESSION_COOKIE, "");
-        if (sessionId.length() > 0) {
-            StringBuilder builder = new StringBuilder();
-            builder.append(SESSION_COOKIE);
-            builder.append("=");
-            builder.append(sessionId);
-            if (headers.containsKey(COOKIE_KEY)) {
-                builder.append("; ");
-                builder.append(headers.get(COOKIE_KEY));
-            }
-            headers.put(COOKIE_KEY, builder.toString());
+//    public final void addSessionCookie(Map<String, String> headers) {
+//        String sessionId = mPreferences.getString(SESSION_COOKIE, "");
+//        if (sessionId.length() > 0) {
+//            Log.d("ciao","qualcosa c'è" + sessionId);
+//            StringBuilder builder = new StringBuilder();
+//            builder.append(sessionId);
+////            if (headers.containsKey(SESSION_COOKIE)) {
+////                builder.append("; ");
+////                builder.append(headers.get(COOKIE_KEY));
+////            }
+//            headers.put(COOKIE_KEY, builder.toString());
+//        }
+//
+//    }
+    public final void addSessionCookie(Map<String, String> headers)
+    {
+        SharedPreferences prefs = mPreferences;
+        String cookie = prefs.getString(COOKIE_KEY, "");
+        if (cookie.contains("expires")) {
+        /** you might need to make sure that your cookie returns expires when its expired. I also noted that cokephp returns deleted */
+            removeCookie();
+            headers.put(COOKIE_KEY,"");
         }
+        headers.put(COOKIE_KEY,cookie);
+    }
 
+    public void removeCookie() {
+        SharedPreferences prefs = mPreferences;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(COOKIE_KEY);
+        editor.commit();
     }
 }
