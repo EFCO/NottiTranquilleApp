@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,9 +27,6 @@ public class AppController extends Application {
 
     private SharedPreferences mPreferences;
 
-    public static AppController get() {
-        return mInstance;
-    }
 
     @Override
     public void onCreate() {
@@ -96,20 +92,6 @@ public class AppController extends Application {
      *
      * @param headers
      */
-//    public final void addSessionCookie(Map<String, String> headers) {
-//        String sessionId = mPreferences.getString(SESSION_COOKIE, "");
-//        if (sessionId.length() > 0) {
-//            Log.d("ciao","qualcosa c'è" + sessionId);
-//            StringBuilder builder = new StringBuilder();
-//            builder.append(sessionId);
-////            if (headers.containsKey(SESSION_COOKIE)) {
-////                builder.append("; ");
-////                builder.append(headers.get(COOKIE_KEY));
-////            }
-//            headers.put(COOKIE_KEY, builder.toString());
-//        }
-//
-//    }
     public final void addSessionCookie(Map<String, String> headers)
     {
         SharedPreferences prefs = mPreferences;

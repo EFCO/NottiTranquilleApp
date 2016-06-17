@@ -28,18 +28,9 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.efcompany.nottitranquille.ConnectionActivity;
-import com.efcompany.nottitranquille.R;
-import com.efcompany.nottitranquille.ResultsActivity;
 import com.efcompany.nottitranquille.extratools.AppController;
-import com.efcompany.nottitranquille.extratools.GenericRequest;
 import com.efcompany.nottitranquille.model.AdvSearchData;
-import com.efcompany.nottitranquille.model.Location;
-import com.efcompany.nottitranquille.model.SearchData;
-import com.efcompany.nottitranquille.model.enumeration.LocationType;
 import com.google.gson.Gson;
 
 import org.joda.time.DateTime;
@@ -48,11 +39,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class AdvancedSearchActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -68,10 +57,6 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     Spinner spPriceRange;
     Spinner spLocationType;
     Spinner spMaxTenants;
-    CheckBox cbWiFi;
-    CheckBox cbAirConditioner;
-    CheckBox cbStrongBox;
-    Button bAdvancedSearch;
     Button bSearch;
     LinearLayout checkboxLayout;
 
@@ -82,7 +67,6 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
 
     String nation;
     String city;
-    int price;
 
     // JSON Node names
     private static final String TAG_SUCCESS = "code";
@@ -166,7 +150,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 // since we don't know which of the two underlying network vehicles
                 // will Volley use, we have to handle and store session cookies manually
-                AppController.get().checkSessionCookie(response.headers);
+                AppController.getInstance().checkSessionCookie(response.headers);
 
                 return super.parseNetworkResponse(response);
             }
@@ -183,7 +167,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
                     headers = new HashMap<String, String>();
                 }
 
-                AppController.get().addSessionCookie(headers);
+                AppController.getInstance().addSessionCookie(headers);
 
                 return headers;
             }
@@ -237,7 +221,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 // since we don't know which of the two underlying network vehicles
                 // will Volley use, we have to handle and store session cookies manually
-                AppController.get().checkSessionCookie(response.headers);
+                AppController.getInstance().checkSessionCookie(response.headers);
 
                 return super.parseNetworkResponse(response);
             }
@@ -254,7 +238,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
                     headers = new HashMap<String, String>();
                 }
 
-                AppController.get().addSessionCookie(headers);
+                AppController.getInstance().addSessionCookie(headers);
 
                 return headers;
             }
@@ -335,7 +319,6 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     }
 
 
-    //TODO Trovare modo per usare elenco automatico
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId()==spPriceRange.getId()){
@@ -372,7 +355,6 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         showProgress(true);
-        //TODO Controllo DatePicker (Potrebbe servire dialog)
         DateTime checkin = new DateTime(dpCheckIn.getCalendarView().getDate());
         DateTime checkout = new DateTime(dpCheckOut.getCalendarView().getDate());
         if (checkout.isBefore(checkin)) {
@@ -394,30 +376,16 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
         } else {
             query.setCity(city);
         }
-        //TODO Scoprire come NON Impostare il calendario
         query.setCheckin(checkin.toString("dd-MM-yyyy"));
         query.setCheckout(checkout.toString("dd-MM-yyyy"));
 
-        //TODO Trovare modo per usare elenco automatico
         for (int i = 0; i < checkboxLayout.getChildCount(); i++) {
             CheckBox ch = (CheckBox) checkboxLayout.getChildAt(i);
             if (ch.isChecked()) {
                 query.getCommodities().add(ch.getText().toString());
             }
         }
-//        List<String> commodities = Arrays.asList("0","0","0"); //TODO Gli elementi devono essere tanti quanti i campi
-//        if (cbWiFi.isChecked()){
-//            commodities.set(0,"1");
-//        }
-//        if (cbAirConditioner.isChecked()){
-//            commodities.set(1,"1");
-//        }
-//        if (cbStrongBox.isChecked()){
-//            commodities.set(2,"1");
-//        }
-//        query.setCommodities(commodities);
 
-        //TODO Connect
         StringRequest postRequest = new StringRequest(Request.Method.POST, site + "/api/search.jsp",
                 new Response.Listener<String>() {
                     @Override
@@ -496,7 +464,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 // since we don't know which of the two underlying network vehicles
                 // will Volley use, we have to handle and store session cookies manually
-                AppController.get().checkSessionCookie(response.headers);
+                AppController.getInstance().checkSessionCookie(response.headers);
 
                 return super.parseNetworkResponse(response);
             }
@@ -513,7 +481,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements View.On
                     headers = new HashMap<String, String>();
                 }
 
-                AppController.get().addSessionCookie(headers);
+                AppController.getInstance().addSessionCookie(headers);
 
                 return headers;
             }

@@ -23,7 +23,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.efcompany.nottitranquille.extratools.AppController;
 
@@ -80,8 +79,6 @@ public class RegistrationActivity extends Activity {
             startActivity(intent);
         }
         site += "/api/access.jsp";
-       // site += "/registration.php";
-        //localhost:8080/api/access.jsp
 
 
         mEmailView = (EditText) findViewById(R.id.email);
@@ -205,7 +202,6 @@ public class RegistrationActivity extends Activity {
             fields.put("address", address);
             fields.put("dateofbirth", dateofbirth);
             fields.put("registrer", "registrer");
-            //fields.put("api", "true");
 
 
 
@@ -268,7 +264,7 @@ public class RegistrationActivity extends Activity {
                 protected Response<String> parseNetworkResponse(NetworkResponse response) {
                     // since we don't know which of the two underlying network vehicles
                     // will Volley use, we have to handle and store session cookies manually
-                    AppController.get().checkSessionCookie(response.headers);
+                    AppController.getInstance().checkSessionCookie(response.headers);
 
                     return super.parseNetworkResponse(response);
                 }
@@ -285,7 +281,7 @@ public class RegistrationActivity extends Activity {
                         headers = new HashMap<String, String>();
                     }
 
-                    AppController.get().addSessionCookie(headers);
+                    AppController.getInstance().addSessionCookie(headers);
 
                     return headers;
                 }};

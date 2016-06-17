@@ -18,8 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,12 +26,8 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.efcompany.nottitranquille.extratools.AppController;
-import com.efcompany.nottitranquille.extratools.GenericRequest;
-import com.efcompany.nottitranquille.model.Location;
 import com.efcompany.nottitranquille.model.SearchData;
 import com.google.gson.Gson;
 
@@ -43,13 +37,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -91,7 +81,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     Gson gson;
     JSONArray locsjson = null;
-    List<Location> locations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +114,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             Intent intent = new Intent(this, ConnectionActivity.class);
             startActivity(intent);
         }
-        //site += "/search.php";
         site += "/api/search.jsp";
 
         gson = new Gson();
@@ -154,42 +142,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 query.setPricerange("Nessun+limite");
                 break;
         }
-//        switch (position){
-//            case 0:
-//                price
-//                break;
-//            case 1:
-//                etIn2.setVisibility(View.VISIBLE);
-//                etIn1.setHint(R.string.strOp1AHint);
-//                etIn2.setHint(R.string.strOp1BHint);
-//                break;
-//            case 2:
-//                etIn2.setVisibility(View.GONE);
-//                etIn1.setHint(R.string.strOp2Hint);
-//                break;
-//            case 3:
-//                etIn2.setVisibility(View.GONE);
-//                etIn1.setHint(R.string.strOp3Hint);
-//                break;
-//            case 4:
-//                etIn2.setVisibility(View.VISIBLE);
-//                etIn1.setHint(R.string.strOp4AHint);
-//                etIn2.setHint(R.string.strOp4BHint);
-//                break;
-//            case 5:
-//                etIn2.setVisibility(View.VISIBLE);
-//                etIn1.setHint(R.string.strOp5AHint);
-//                etIn2.setHint(R.string.strOp5BHint);
-//                break;
-//            case 6:
-//                etIn2.setVisibility(View.GONE);
-//                etIn1.setHint(R.string.strOp6Hint);
-//                break;
-//            case 7:
-//                etIn2.setVisibility(View.GONE);
-//                etIn1.setHint(R.string.strOp7Hint);
-//                break;
-//        }
     }
 
 
@@ -229,7 +181,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 showProgress(false);
                 focusView.requestFocus();
             }
-            //TODO Controllo DatePicker (Potrebbe servire dialog)
             else if (checkout.isBefore(checkin)) {
                 showProgress(false);
                 Toast.makeText(this, getString(R.string.strerrWrongDate), Toast.LENGTH_LONG).show();
@@ -240,7 +191,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 query.setCity(city);
                 query.setCheckin(checkin.toString("dd-MM-yyyy"));
                 query.setCheckout(checkout.toString("dd-MM-yyyy"));
-                //TODO Connect
                 StringRequest postRequest = new StringRequest(Request.Method.POST, site,
                         new Response.Listener<String>() {
                             @Override
@@ -253,9 +203,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                                         // Getting Array of Locations
                                         locsjson = json_response.getJSONArray(TAG_LOCATIONS);
 
-//                                    // Looping through All Locations
-//                                    for (int i = 0; i < locsjson.length(); i++) {
-//                                        locations.add(gson.fromJson(locsjson.getJSONObject(i).toString(), Location.class));
 //                                    }
                                         showProgress(false);
                                         Intent in = new Intent(SearchActivity.this, ResultsActivity.class);
@@ -313,7 +260,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     protected Response<String> parseNetworkResponse(NetworkResponse response) {
                         // since we don't know which of the two underlying network vehicles
                         // will Volley use, we have to handle and store session cookies manually
-                        AppController.get().checkSessionCookie(response.headers);
+                        AppController.getInstance().checkSessionCookie(response.headers);
 
                         return super.parseNetworkResponse(response);
                     }
@@ -329,7 +276,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                             headers = new HashMap<String, String>();
                         }
 
-                        AppController.get().addSessionCookie(headers);
+                        AppController.getInstance().addSessionCookie(headers);
                         return headers;
                     }
                 };

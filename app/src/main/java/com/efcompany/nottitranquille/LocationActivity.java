@@ -25,13 +25,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.efcompany.nottitranquille.extratools.AppController;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class LocationActivity extends AppCompatActivity {
@@ -145,7 +143,6 @@ public class LocationActivity extends AppCompatActivity {
                                 // Getting Location details
                                 locsjson = json_response.getJSONObject(TAG_LOCATION);
 
-                                //TODO: show on screen
                                // ivMainImage
                                 tvID.append(locID);
                                 tvName.append(locName);
@@ -194,7 +191,7 @@ public class LocationActivity extends AppCompatActivity {
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 // since we don't know which of the two underlying network vehicles
                 // will Volley use, we have to handle and store session cookies manually
-                AppController.get().checkSessionCookie(response.headers);
+                AppController.getInstance().checkSessionCookie(response.headers);
 
                 return super.parseNetworkResponse(response);
             }
@@ -211,7 +208,7 @@ public class LocationActivity extends AppCompatActivity {
                     headers = new HashMap<String, String>();
                 }
 
-                AppController.get().addSessionCookie(headers);
+                AppController.getInstance().addSessionCookie(headers);
 
                 return headers;
             }

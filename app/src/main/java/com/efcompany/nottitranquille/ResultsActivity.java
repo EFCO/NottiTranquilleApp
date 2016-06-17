@@ -1,25 +1,20 @@
 package com.efcompany.nottitranquille;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.efcompany.nottitranquille.extratools.JSONParser;
 import com.efcompany.nottitranquille.sortingtools.SortInverter;
 import com.efcompany.nottitranquille.sortingtools.Sorter;
 import com.google.android.gms.appindexing.Action;
@@ -32,7 +27,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 
 public class ResultsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -94,15 +88,6 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
 
         query.setText(i.getStringExtra("query"));
 
-//        //Get site
-//        SharedPreferences sharedPref = this.getSharedPreferences("com.efcompany.nottitranquille", MODE_PRIVATE);
-//        String site = sharedPref.getString("connectto", "");
-//        if (site.equals("")) {
-//            Toast.makeText(this, "Insert the site", Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(this, ConnectionActivity.class);
-//            startActivity(intent);
-//        }
-//        site += "/api/search.jsp";
 
         ArrayAdapter<String> wadapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_dropdown_item, orderWhat);
@@ -157,17 +142,6 @@ public class ResultsActivity extends AppCompatActivity implements AdapterView.On
                         R.id.ivResImage1});
         // Updating listview
         lv.setAdapter(adapter);
-//
-//        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//                Intent in = new Intent(ResultsActivity.this, LocationActivity.class);
-//                HashMap<String,String> item = locationsList.get(position);
-//                startActivity(in);
-//            }
-//        });
 
         //Set Listeners
         orderby.setOnItemSelectedListener(ResultsActivity.this);

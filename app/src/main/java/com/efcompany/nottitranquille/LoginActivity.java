@@ -25,7 +25,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.efcompany.nottitranquille.extratools.AppController;
 
@@ -37,7 +36,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
@@ -128,12 +126,6 @@ public class LoginActivity extends AppCompatActivity {
             focusView = mEmailView;
             cancel = true;
        }
-        //TODO Da rimettere per permettere connessione sia con mail che con username
-// else if (!isEmailValid(email)) {
-//            mEmailView.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -167,12 +159,10 @@ public class LoginActivity extends AppCompatActivity {
             }
 
 
-                 //TODO Da rimettere per permettere connessione sia con mail che con username
-                    //fields.put("mail", email);
+
                     fields.put("username", email);
                     fields.put("password", codedPassword);
                     fields.put("login", "login");
-                    //fields.put("api", "true");
 
 
 
@@ -237,7 +227,7 @@ public class LoginActivity extends AppCompatActivity {
                 protected Response<String> parseNetworkResponse(NetworkResponse response) {
                     // since we don't know which of the two underlying network vehicles
                     // will Volley use, we have to handle and store session cookies manually
-                    AppController.get().checkSessionCookie(response.headers);
+                    AppController.getInstance().checkSessionCookie(response.headers);
 
                     return super.parseNetworkResponse(response);
                 }
@@ -254,7 +244,7 @@ public class LoginActivity extends AppCompatActivity {
                         headers = new HashMap<String, String>();
                     }
 
-                    AppController.get().addSessionCookie(headers);
+                    AppController.getInstance().addSessionCookie(headers);
 
                     return headers;
                 }};
